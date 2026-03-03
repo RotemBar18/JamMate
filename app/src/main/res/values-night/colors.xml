@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Core Static Colors (Restored for stability) -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="darkTeal">#355D61</color>
+    <color name="bridgeTeal">#5F8D88</color>
+    <color name="blue">#42A5F5</color>
+    <color name="darkTan">#D9A575</color>
+    <color name="dark">#121212</color>
+    <color name="offWhite">#BDBDBD</color>
+    <color name="error_red">#FFB4AB</color>
+
+    <!-- Semantic Theme Overrides (Dark Mode) -->
+    <color name="app_background">#121212</color>
+    <color name="app_surface">#1E1E1E</color>
+    <color name="app_surface_variant">#2C2C2C</color>
+    <color name="app_text_main">#FFFFFF</color>
+    <color name="app_text_secondary">#BDBDBD</color>
+    <color name="app_accent">#9DD2D6</color>
+    <color name="app_outline">#545454</color>
+    <color name="app_error">#FFB4AB</color>
+</resources>

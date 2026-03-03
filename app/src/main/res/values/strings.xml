@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">JamMate</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="post">Post</string>
+    <string name="post_what_ever_you_want_to_share_with_the_community">Post what ever you want to share with the community</string>
+    <string name="title">Title</string>
+    <string name="e_g_looking_to_jam_this_weekend">e.g. Looking to jam this weekend</string>
+    <string name="description">Description</string>
+    <string name="write_something">Write something...</string>
+    <string name="image_url_optional">Image URL (Optional)</string>
+    <string name="back">Back</string>
+    <string name="publish">Publish</string>
+    <string name="location">Location</string>
+    <string name="jam">Post Jam</string>
+    <string name="jam_post_subtitle">Invite musicians and others to join you in a jam</string>
+    <string name="date_time"><![CDATA[Date & Time]]></string>
+</resources>

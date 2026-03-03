@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected -->
+    <item android:color="@color/offWhite" android:state_checked="true"/>
+    <!-- Default -->
+    <item android:color="@color/white"/>
+    <color name="app_background">#F8FDFF</color> <!-- Fresh Light Blue-White -->
+    <color name="app_surface">#FFFFFF</color>    <!-- Pure White Card -->
+    <color name="app_text_main">#191C1D</color>  <!-- Deep Slate Text -->
+    <color name="app_accent">#355D61</color>
+</selector>

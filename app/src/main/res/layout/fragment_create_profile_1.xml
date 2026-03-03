@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/createProfileStep1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/createProfile_LBL_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Personal Details"
+            android:textColor="@color/app_text_main"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/createProfile_LBL_subHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Let's build your identity"
+            android:textColor="@color/app_text_secondary"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfile_LBL_header" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/createProfileStep1_LBL_firstName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="First Name"
+            android:textColor="@color/app_text_main"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfile_LBL_subHeader" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/createProfileStep1_LAY_firstName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundColor="@color/app_surface"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfileStep1_LBL_firstName">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/createProfileStep1_INPUT_firstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Jane"
+                android:inputType="textPersonName"
+                android:padding="16dp"
+                android:textColor="@color/app_text_main"
+                android:textColorHint="@color/app_text_secondary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/createProfileStep1_LBL_lastName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Last Name"
+            android:textColor="@color/app_text_main"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfileStep1_LAY_firstName" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/createProfileStep1_LAY_lastName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundColor="@color/app_surface"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfileStep1_LBL_lastName">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/createProfileStep1_INPUT_lastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Doe"
+                android:inputType="textPersonName"
+                android:padding="16dp"
+                android:textColor="@color/app_text_main"
+                android:textColorHint="@color/app_text_secondary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/createProfileStep1_LBL_stageName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Stage Name (Optional)"
+            android:textColor="@color/app_text_main"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfileStep1_LAY_lastName" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/createProfileStep1_LAY_stageName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundColor="@color/app_surface"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfileStep1_LBL_stageName">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/createProfileStep1_INPUT_stageName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="The Rocker"
+                android:inputType="textPersonName"
+                android:padding="16dp"
+                android:textColor="@color/app_text_main"
+                android:textColorHint="@color/app_text_secondary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/createProfileStep1_LBL_Location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="City"
+            android:textColor="@color/app_text_main"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfileStep1_LAY_stageName" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/createProfileStep1_LAY_Location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundColor="@color/app_surface"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:hintEnabled="false"
+            app:endIconMode="custom"
+            app:endIconDrawable="@android:drawable/ic_menu_mylocation"
+            app:endIconTint="@color/app_accent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfileStep1_LBL_Location">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/createProfileStep1_INPUT_Location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Austin, TX"
+                android:inputType="textPostalAddress"
+                android:padding="16dp"
+                android:textColor="@color/app_text_main"
+                android:textColorHint="@color/app_text_secondary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/createProfileStep1_LBL_about"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="About (Optional)"
+            android:textColor="@color/app_text_main"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfileStep1_LAY_Location" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/createProfileStep1_LAY_about"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundColor="@color/app_surface"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfileStep1_LBL_about">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/createProfileStep1_INPUT_about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tell musicians a bit about you..."
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:maxLines="6"
+                android:gravity="top"
+                android:padding="16dp"
+                android:textColor="@color/app_text_main"
+                android:textColorHint="@color/app_text_secondary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

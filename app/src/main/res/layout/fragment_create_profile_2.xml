@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/createProfileStep2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/createProfile2_LBL_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Music"
+            android:textColor="@color/app_text_main"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/createProfile2_LBL_subHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Let others know your vibe"
+            android:textColor="@color/app_text_secondary"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfile2_LBL_header" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/createProfileStep2_LBL_instruments"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Instruments"
+            android:textColor="@color/app_text_main"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfile2_LBL_subHeader" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/createProfileStep2_CHIPGROUP_instruments"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:chipSpacingHorizontal="8dp"
+            app:chipSpacingVertical="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfileStep2_LBL_instruments">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_instrument_ElectricGuitar"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Electric Guitar"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_instrument_Drums"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Drums"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_instrument_Bass"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bass"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_instrument_Vocals"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vocals"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_instrument_Piano"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Piano"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_instrument_Keys"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Keys"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_instrument_Saxophone"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saxophone"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_instrument_Violin"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Violin"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_instrument_Trumpet"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trumpet"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_instrument_AcousticGuitar"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Acoustic Guitar"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_instrument_Chello"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chello"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+        </com.google.android.material.chip.ChipGroup>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/createProfileStep2_LBL_genres"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Genres"
+            android:textColor="@color/app_text_main"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfileStep2_CHIPGROUP_instruments" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/createProfileStep2_CHIPGROUP_genres"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:chipSpacingHorizontal="8dp"
+            app:chipSpacingVertical="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfileStep2_LBL_genres">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_genre_Rock"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rock"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_Indie"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Indie"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_Jazz"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jazz"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_Blues"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Blues"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_HipHop"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hip-Hop"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_Pop"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pop"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_Electronic"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Electronic"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_Metal"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Metal"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_Folk"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Folk"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_RandB"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="R&amp;B"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_Funk"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Funk"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+        </com.google.android.material.chip.ChipGroup>
+
+        <!-- Skill Level Section -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/createProfileStep2_LBL_skill"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Skill Level"
+            android:textColor="@color/app_text_main"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfileStep2_CHIPGROUP_genres" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/createProfileStep2_LBL_skill_hint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Describe your experience level"
+            android:textColor="@color/app_text_secondary"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfileStep2_LBL_skill" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/createProfileStep2_CHIPGROUP_skill"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:chipSpacingHorizontal="8dp"
+            app:chipSpacingVertical="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/createProfileStep2_LBL_skill_hint"
+            app:singleSelection="true"
+            app:selectionRequired="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_skill_beginner"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Beginner"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_skill_intermediate"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Intermediate"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_skill_advanced"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Advanced"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_skill_Professional"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Professional"
+                app:chipBackgroundColor="@color/app_surface"
+                app:chipStrokeColor="@color/app_outline"
+                app:chipStrokeWidth="1dp"
+                android:textColor="@color/app_text_main" />
+        </com.google.android.material.chip.ChipGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

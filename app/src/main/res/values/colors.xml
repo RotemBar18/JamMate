@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Core Basic Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Semantic Theme Colors (Light Mode) -->
+    <color name="app_background">#F8FDFF</color>
+    <color name="app_surface">#FFFFFF</color>
+    <color name="app_surface_variant">#F5F5F5</color>
+    <color name="app_text_main">#191C1D</color>
+    <color name="app_text_secondary">#3F4849</color>
+    <color name="app_accent">#355D61</color>
+    <color name="app_outline">#B3C6C7</color>
+    <color name="app_error">#BA1A1A</color>
+
+    <!-- Legacy/Compatibility -->
+    <color name="chip_border_light">#E6E8EB</color>
+    <color name="chip_text_muted">#6B7280</color>
+    <color name="rating_main_color">#FFF176</color>
+    <color name="lightGreen">#f2f6fa</color>
+    <color name="placeholder_color">#aaaaaa</color>
+
+    <!-- Core Brand Colors (Original names) -->
+    <color name="darkTeal">#355D61</color>
+    <color name="bridgeTeal">#5F8D88</color>
+    <color name="blue">#42A5F5</color>
+    <color name="darkTan">#D9A575</color>
+    <color name="dark">#333333</color>
+    <color name="offWhite">#F5F5F5</color>
+    <color name="error_red">#BA1A1A</color>
+</resources>

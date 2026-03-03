@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/comments_LAY_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_bottom_sheet"
+    android:backgroundTint="@color/app_surface"
+    android:orientation="vertical"
+    android:paddingTop="8dp">
+
+    <View
+        android:id="@+id/comments_VIEW_handle"
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_sheet_handle"
+        android:backgroundTint="@color/app_text_secondary" />
+
+    <TextView
+        android:id="@+id/comments_LBL_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:text="Comments"
+        android:textColor="@color/app_text_main"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/comments_LST_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp" />
+
+    <LinearLayout
+        android:id="@+id/comments_LAY_inputBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/app_surface"
+        android:elevation="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <EditText
+            android:id="@+id/comments_INPUT_newComment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="Add a comment..."
+            android:importantForAutofill="no"
+            android:inputType="textLongMessage|textAutoCorrect|textCapSentences"
+            android:maxLines="4"
+            android:padding="8dp"
+            android:textColor="@color/app_text_main"
+            android:textColorHint="@color/app_text_secondary"
+            android:textSize="14sp" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/comments_BTN_send"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Send comment"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_send"
+            app:tint="@color/app_accent" />
+    </LinearLayout>
+
+</LinearLayout>

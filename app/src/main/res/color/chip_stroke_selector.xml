@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected -->
+    <item android:color="@color/dark" android:state_checked="true"/>
+    <!-- Default -->
+    <item android:color="@color/chip_border_light"/>
+    <color name="app_background">#121212</color> <!-- Deep Immersive Gray -->
+    <color name="app_surface">#1E1E1E</color>    <!-- Elevated Dark Card -->
+    <color name="app_text_main">#FFFFFF</color>  <!-- Pure White Text -->
+    <color name="app_accent">#9DD2D6</color>
+</selector>

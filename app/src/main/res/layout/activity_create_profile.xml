@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background">
+
+    <!-- Progress Tracker Area -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/createProfile_LAY_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/top_margin_big"
+        android:paddingHorizontal="@dimen/progBar_padding"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:id="@+id/createProfile_BAR_progBar1"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/prog_bar_height"
+            android:max="1"
+            android:progress="1"
+            android:progressTint="@color/app_accent"
+            android:progressBackgroundTint="@color/app_surface"
+            app:layout_constraintEnd_toStartOf="@+id/createProfile_VIEW_spacer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/createProfile_VIEW_spacer"
+            android:layout_width="@dimen/progBar_space_width"
+            android:layout_height="1dp"
+            app:layout_constraintEnd_toStartOf="@+id/createProfile_BAR_progBar2"
+            app:layout_constraintStart_toEndOf="@+id/createProfile_BAR_progBar1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/createProfile_BAR_progBar2"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/prog_bar_height"
+            android:max="1"
+            android:progress="0"
+            android:progressTint="@color/app_accent"
+            android:progressBackgroundTint="@color/app_surface"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/createProfile_VIEW_spacer"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Content Area -->
+    <LinearLayout
+        android:id="@+id/createProfile_LAY_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/createProfile_LAY_progress"
+        app:layout_constraintBottom_toTopOf="@id/createProfile_LAY_bottom">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/progBar_padding"
+            android:paddingTop="@dimen/progBar_padding"
+            android:paddingBottom="@dimen/small_padding">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/createProfile_LBL_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create Your Profile"
+                android:textStyle="bold"
+                android:textSize="28sp"
+                android:textColor="@color/app_text_main" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/createProfile_LBL_seconderyHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="This helps other musicians find you"
+                android:textColor="@color/app_text_secondary"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/createProfile_LAY_pages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                android:id="@+id/createProfile_INCLUDE_page1"
+                layout="@layout/fragment_create_profile_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"/>
+
+            <include
+                android:id="@+id/createProfile_INCLUDE_page2"
+                layout="@layout/fragment_create_profile_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- Action Buttons -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/createProfile_LAY_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/createProfile_BTN_next"
+            style="@style/Widget.JamMate.Button.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Next Step"
+            app:cornerRadius="16dp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/createProfile_BTN_finish"
+            style="@style/Widget.JamMate.Button.Primary"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:text="Finish"
+            android:visibility="gone"
+            app:cornerRadius="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/createProfile_GUIDE_actions" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/createProfile_BTN_back"
+            style="@style/Widget.JamMate.Button.Outlined"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:text="Back"
+            android:visibility="gone"
+            app:cornerRadius="16dp"
+            app:strokeColor="@color/app_outline"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/createProfile_GUIDE_actions"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/createProfile_GUIDE_actions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.4" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

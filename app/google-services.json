@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1032938046526",
+    "firebase_url": "https://jammate-18d27-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "jammate-18d27",
+    "storage_bucket": "jammate-18d27.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032938046526:android:42f5e768da8a89cbe17d6f",
+        "android_client_info": {
+          "package_name": "com.example.jammate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1032938046526-7ocmstmnv45sn05gin7nrp06ppfvtknd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.jammate",
+            "certificate_hash": "38dff2bc1b570b46574db22dc6aac78c2968fb98"
+          }
+        },
+        {
+          "client_id": "1032938046526-rso5dq7l2o9njdjm3uas09bt31dvae1e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjZQrlprWl184ERmiVmvDTQCpD7aFUvc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032938046526-rso5dq7l2o9njdjm3uas09bt31dvae1e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
