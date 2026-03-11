@@ -16,6 +16,7 @@ import com.example.jammate.model.PostUi
 import com.example.jammate.model.User
 import com.example.jammate.adapters.PostViewerPagerAdapter
 import com.example.jammate.databinding.ActivityPostViewerBinding
+import com.example.jammate.databinding.ModalDeleteConfirmationBinding
 import com.example.jammate.databinding.ModalDeletePostBinding
 import com.example.jammate.ui.fragments.CommentsBottomSheetFragment
 import com.example.jammate.utilities.Constants
@@ -87,7 +88,13 @@ class PostViewerActivity : AppCompatActivity() {
             onJamJoin = { post -> toggleAction(post, Constants.PostActions.COMING) },
             onMemberApply = { post -> toggleAction(post, Constants.PostActions.APPLY) },
             onFollow = { uid -> toggleFollow(uid) },
-            onProfileClick = { uid -> ProfileActivity.start(this, uid) },
+            onProfileClick = { uid ->
+                if (uid == PostManager.instance.getCurrentUid()) {
+                    finish()
+                } else {
+                    ProfileActivity.start(this, uid)
+                }
+            },
             onMoreClick = { post -> showDeleteBottomSheet(post) }
         )
     }
@@ -133,12 +140,17 @@ class PostViewerActivity : AppCompatActivity() {
 
     // Displays a confirmation dialog before permanently removing a post.
     private fun showDeleteConfirmation(post: Post) {
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Delete Post")
-            .setMessage("Are you sure you want to permanently delete this post?")
-            .setNegativeButton("Cancel", null)
-            .setPositiveButton("Delete") { _, _ -> executeDeletion(post) }
-            .show()
+        val dialog = BottomSheetDialog(this)
+        val modalBinding = ModalDeleteConfirmationBinding.inflate(layoutInflater)
+        dialog.setContentView(modalBinding.root)
+
+        modalBinding.deleteConfirmBTNDelete.setOnClickListener {
+            dialog.dismiss()
+            executeDeletion(post)
+        }
+        modalBinding.deleteConfirmBTNCancel.setOnClickListener { dialog.dismiss() }
+
+        dialog.show()
     }
 
     // Removes the post from the database and closes the viewer.

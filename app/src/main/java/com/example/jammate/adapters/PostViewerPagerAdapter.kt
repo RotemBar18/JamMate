@@ -113,7 +113,7 @@ class PostViewerPagerAdapter(
         bindInteractions(binding, item, media.hasMedia)
     }
 
-    // Clears media state to ensure clean view recycling.
+    // clears media state to ensure clean view recycling.
     private fun resetState(binding: ItemPostViewerPageBinding) {
         hideLoader(binding)
         binding.postViewerPLYVideo.apply {
@@ -123,7 +123,7 @@ class PostViewerPagerAdapter(
         binding.postViewerIMGMedia.isVisible = true
     }
 
-    // Configures user info, profile clicks, and follow button logic.
+    // user info, profile clicks, and follow button logic.
     private fun bindHeader(binding: ItemPostViewerPageBinding, item: PostUi) {
         binding.postViewerBTNBack.setOnClickListener { onBack() }
         binding.postViewerLBLUserName.text = item.owner.stageName.ifBlank { "${item.owner.firstName} ${item.owner.lastName}" }
@@ -267,20 +267,22 @@ class PostViewerPagerAdapter(
 
     // Prepares and plays video content for the currently selected page.
     fun playAt(pager: ViewPager2, position: Int, player: ExoPlayer) {
-        if (position !in 0 until itemCount) return
-        currentPager = pager
-        currentPosition = position
-        if (!playerListenerAttached) { player.addListener(playerListener); playerListenerAttached = true }
-        val binding = getBindingAt(position) ?: return
-        val media = getItem(position).post.mediaInfo()
-        if (!media.isVideo) { stopAt( position, player); return }
-        binding.postViewerLOTLoading.isVisible = true
-        binding.postViewerLOTLoading.playAnimation()
-        binding.postViewerIMGMedia.isGone = true
-        binding.postViewerPLYVideo.apply { isVisible = true; this.player = player }
-        player.setMediaItem(MediaItem.fromUri(Uri.parse(media.url)))
-        player.prepare()
-        player.playWhenReady = true
+        pager.post {
+            if (position !in 0 until itemCount) return@post
+            currentPager = pager
+            currentPosition = position
+            if (!playerListenerAttached) { player.addListener(playerListener); playerListenerAttached = true }
+            val binding = getBindingAt(position) ?: return@post
+            val media = getItem(position).post.mediaInfo()
+            if (!media.isVideo) { stopAt( position, player); return@post }
+            binding.postViewerLOTLoading.isVisible = true
+            binding.postViewerLOTLoading.playAnimation()
+            binding.postViewerIMGMedia.isGone = true
+            binding.postViewerPLYVideo.apply { isVisible = true; this.player = player }
+            player.setMediaItem(MediaItem.fromUri(Uri.parse(media.url)))
+            player.prepare()
+            player.playWhenReady = true
+        }
     }
 
     // Stops video playback and detaches the player.

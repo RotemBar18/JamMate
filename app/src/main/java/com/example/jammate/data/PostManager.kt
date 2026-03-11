@@ -181,6 +181,22 @@ class PostManager private constructor() {
         }.addOnFailureListener { e -> onResult(false, emptyList(), e.message) }
     }
 
+    // Fetches posts with pagination, ordered by creation time.
+    fun fetchPostsPaginated(pageSize: Int, startAfter: Long?, onResult: (Boolean, List<Post>, String?) -> Unit) {
+        var query = db.child("posts").orderByChild("createdAt")
+
+        // If startAfter is provided, we fetch posts created at or before that timestamp.
+        // We subtract 1 from startAfter to avoid fetching the same last post again.
+        if (startAfter != null) {
+            query = query.endAt((startAfter - 1).toDouble())
+        }
+
+        query.limitToLast(pageSize).get().addOnSuccessListener { snap ->
+            val posts = snap.children.mapNotNull { it.getValue(Post::class.java)?.apply { postId = it.key ?: "" } }.reversed()
+            onResult(true, posts, null)
+        }.addOnFailureListener { e -> onResult(false, emptyList(), e.message) }
+    }
+
     // Identifies which posts in a provided list have been liked by the current user.
     fun fetchLikedPostIds(ids: List<String>, onResult: (Set<String>) -> Unit) {
         val uid = getCurrentUid() ?: return onResult(emptySet())

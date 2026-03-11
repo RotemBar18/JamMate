@@ -13,15 +13,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.jammate.adapters.ProfileGridAdapter
 import com.example.jammate.data.PostManager
-import com.example.jammate.data.UserManager
 import com.example.jammate.databinding.FragmentExploreBinding
 import com.example.jammate.interfaces.LocationCallback
 import com.example.jammate.model.LocationData
-import com.example.jammate.model.Post
 import com.example.jammate.model.PostUi
-import com.example.jammate.model.User
 import com.example.jammate.ui.activities.PostViewerActivity
 import com.example.jammate.utilities.GeoHelper
 import com.example.jammate.utilities.GridInnerSpacing
@@ -35,10 +33,12 @@ class ExploreFragment : Fragment(), LocationCallback {
 
     private val postManager = PostManager.instance
 
-    private var allUiPosts: List<PostUi> = emptyList()
+    private var allUiPosts: MutableList<PostUi> = mutableListOf()
     private var userLocation: LocationData? = null
 
-    private val usersCache = mutableMapOf<String, User>()
+    private var isLoading = false
+    private var canLoadMore = true
+    private var lastPostTimestamp: Long? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentExploreBinding.inflate(inflater, container, false)
@@ -58,7 +58,7 @@ class ExploreFragment : Fragment(), LocationCallback {
         if (shouldRefresh && hasLocationPermission()) {
             fetchUserLocation()
         } else {
-            loadPosts()
+            loadPosts(isInitialLoad = true)
         }
     }
 
@@ -78,8 +78,24 @@ class ExploreFragment : Fragment(), LocationCallback {
         )
 
         val spanCount = 3
-        binding.exploreRVPosts.layoutManager = GridLayoutManager(requireContext(), spanCount)
+        val layoutManager = GridLayoutManager(requireContext(), spanCount)
+        binding.exploreRVPosts.layoutManager = layoutManager
         binding.exploreRVPosts.adapter = gridAdapter
+
+        // Add scroll listener for pagination
+        binding.exploreRVPosts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                // Load more items if we are at the end of the list
+                if (!isLoading && canLoadMore && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
+                    loadPosts(isInitialLoad = false)
+                }
+            }
+        })
 
         // 🔥 Add spacing
         val spacingDp = 2
@@ -119,90 +135,78 @@ class ExploreFragment : Fragment(), LocationCallback {
     override fun onLocation(location: LocationData) {
         userLocation = location
         UserLocationStore.save(requireContext().applicationContext, location)
-        loadPosts()
+        loadPosts(isInitialLoad = true)
     }
 
     override fun onLocationError(message: String) {
         toast(message)
-        loadPosts()
+        loadPosts(isInitialLoad = true)
     }
 
-    private fun loadPosts() {
-        postManager.fetchAllPosts { ok, posts, err ->
+    private fun loadPosts(isInitialLoad: Boolean) {
+        if (isLoading) return
+        isLoading = true
+
+        if (isInitialLoad) {
+            allUiPosts.clear()
+            lastPostTimestamp = null
+            canLoadMore = true
+            gridAdapter.submitList(emptyList()) // Clear adapter for a fresh load
+        }
+
+        postManager.fetchPostsPaginated(15, lastPostTimestamp) { ok, posts, err ->
+            isLoading = false
             if (!ok) {
                 toast(err ?: "Failed loading posts")
-                gridAdapter.submitList(emptyList())
-                return@fetchAllPosts
+                return@fetchPostsPaginated
             }
+
+            // If we received fewer posts than requested, we've reached the end
+            if (posts.size < 15) {
+                canLoadMore = false
+            }
+
+            if (posts.isEmpty()) return@fetchPostsPaginated
+
+            // Update the timestamp for the next page request
+            lastPostTimestamp = posts.last().createdAt
 
             val myUid = postManager.getCurrentUid()
-
-            // Hide my own posts from Explore
             val visiblePosts = if (myUid.isNullOrBlank()) posts else posts.filter { it.ownerId != myUid }
 
-            if (visiblePosts.isEmpty()) {
-                gridAdapter.submitList(emptyList())
-                return@fetchAllPosts
-            }
+            if (visiblePosts.isEmpty()) return@fetchPostsPaginated
 
-            fetchUsersForPosts(visiblePosts) { usersById ->
-                buildAndShowUi(visiblePosts, usersById)
+            postManager.prepareViewerData(visiblePosts) { postUis ->
+                buildAndShowUi(postUis)
             }
         }
     }
 
-    private fun fetchUsersForPosts(posts: List<Post>, onDone: (Map<String, User>) -> Unit) {
-        val ownerIds = posts.map { it.ownerId }.distinct()
+    private fun buildAndShowUi(newUiPosts: List<PostUi>) {
+        val loc: LocationData? = userLocation
 
-        val result = mutableMapOf<String, User>()
-        ownerIds.forEach { uid ->
-            usersCache[uid]?.let { result[uid] = it }
-        }
+        // Calculate distance for each new post
+        val postsWithDistance = newUiPosts.map { ui ->
+            val p = ui.post
+            val postLocation = p.location
 
-        val missing = ownerIds.filter { !result.containsKey(it) }
-        if (missing.isEmpty()) {
-            onDone(result)
-            return
-        }
-
-        val userManager = UserManager()
-        var remaining = missing.size
-
-        missing.forEach { uid ->
-            userManager.fetchUser(uid) { ok, user, _ ->
-                if (ok && user != null) {
-                    usersCache[uid] = user
-                    result[uid] = user
-                }
-                remaining--
-                if (remaining == 0) onDone(result)
+            val distanceKm = if (loc?.lat != null && loc.lng != null && postLocation?.lat != null && postLocation.lng != null) {
+                GeoHelper.distanceKm(loc.lat!!, loc.lng!!, postLocation.lat!!, postLocation.lng!!)
+            } else {
+                99999.0
             }
-        }
-    }
-
-    private fun buildAndShowUi(posts: List<Post>, usersById: Map<String, User>) {
-        val loc = userLocation
-
-        // Build PostUi list
-        allUiPosts = posts.mapNotNull { p ->
-            val owner = usersById[p.ownerId] ?: return@mapNotNull null
-
-            val distanceKm =
-                if (loc?.lat != null && loc.lng != null && p.location?.lat != null && p.location!!.lng != null) {
-                    GeoHelper.distanceKm(loc.lat!!, loc.lng!!, p.location!!.lat!!, p.location!!.lng!!)
-                } else {
-                    99999.0
-                }
-
-            PostUi(
-                post = p,
-                distanceKm = distanceKm,
-                owner = owner,
-                ownerPhotoUrl = owner.profilePhotoUrl
-            )
+            ui.copy(distanceKm = distanceKm)
         }
 
-            .sortedBy { it.distanceKm }
+        allUiPosts.addAll(postsWithDistance)
+        allUiPosts = allUiPosts.distinctBy { it.post.postId }.toMutableList()
+
+        // Sort by latest, then following, then distance
+        allUiPosts.sortWith(
+            compareByDescending<PostUi> { it.post.createdAt }
+                .thenByDescending { it.isFollowingOwner }
+                .thenBy { it.distanceKm }
+        )
 
         applyFilter(binding.exploreINPUTSearch.text?.toString().orEmpty())
     }
@@ -210,8 +214,8 @@ class ExploreFragment : Fragment(), LocationCallback {
     private fun applyFilter(query: String) {
         val q = query.trim().lowercase()
         val filtered =
-            if (q.isEmpty()) allUiPosts
-            else allUiPosts.filter { it.searchableText.contains(q) }
+            if (q.isEmpty()) allUiPosts.toList() // Create a copy for the adapter
+            else allUiPosts.filter { it.searchableText.contains(q) }.toList()
 
         gridAdapter.submitList(filtered)
     }
