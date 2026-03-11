@@ -12,12 +12,14 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.jammate.R
+import com.example.jammate.data.NotificationManager
 import com.example.jammate.databinding.ActivityMainBinding
 import com.example.jammate.interfaces.LocationCallback
 import com.example.jammate.model.LocationData
 import com.example.jammate.utilities.LocationDetector
 import com.example.jammate.utilities.ThemeManager
 import com.example.jammate.utilities.UserLocationStore
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity(), LocationCallback {
 
@@ -55,6 +57,26 @@ class MainActivity : AppCompatActivity(), LocationCallback {
         val navHost = supportFragmentManager.findFragmentById(R.id.main_HOST_navHost) as NavHostFragment
         val navController = navHost.navController
         binding.mainNAVBottomNavbar.setupWithNavController(navController)
+
+        setupNotificationBadge()
+    }
+
+    fun clearNotificationBadge() {
+        binding.mainNAVBottomNavbar.removeBadge(R.id.notificationFragment)
+    }
+
+    private fun setupNotificationBadge() {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        NotificationManager.instance.observeNotifications(uid) { list ->
+            val unreadCount = list.count { !it.isRead }
+            if (unreadCount > 0) {
+                val badge = binding.mainNAVBottomNavbar.getOrCreateBadge(R.id.notificationFragment)
+                badge.isVisible = true
+                badge.number = unreadCount
+            } else {
+                clearNotificationBadge()
+            }
+        }
     }
 
     private fun requestLocationIfNeededOrFetch() {

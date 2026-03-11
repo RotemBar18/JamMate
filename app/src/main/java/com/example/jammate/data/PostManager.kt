@@ -2,6 +2,7 @@ package com.example.jammate.data
 
 import android.net.Uri
 import com.example.jammate.model.Comment
+import com.example.jammate.model.Notification
 import com.example.jammate.model.Post
 import com.example.jammate.model.PostUi
 import com.example.jammate.model.User
@@ -110,25 +111,53 @@ class PostManager private constructor() {
     fun togglePostAction(postId: String, tag: String, onResult: (Boolean, String?, Boolean) -> Unit) {
         val uid = getCurrentUid() ?: return onResult(false, "No user", false)
 
-        val (root, field) = when (tag) {
-            Constants.PostActions.LIKE -> "postLikes" to "likesCount"
-            Constants.PostActions.COMING -> "jamArrivals" to "arrivalsCount"
-            Constants.PostActions.APPLY -> "memberApplications" to "applicationsCount"
-            else -> return onResult(false, "Invalid action", false)
-        }
+        db.child("posts").child(postId).get().addOnSuccessListener { postSnap ->
+            val post = postSnap.getValue(Post::class.java) ?: return@addOnSuccessListener onResult(false, "Post not found", false)
 
-        val actionRef = db.child(root).child(postId).child(uid)
-        val counterRef = db.child("posts").child(postId).child(field)
+            val (root, field) = when (tag) {
+                Constants.PostActions.LIKE -> "postLikes" to "likesCount"
+                Constants.PostActions.COMING -> "jamArrivals" to "arrivalsCount"
+                Constants.PostActions.APPLY -> "memberApplications" to "applicationsCount"
+                else -> return@addOnSuccessListener onResult(false, "Invalid action", false)
+            }
 
-        actionRef.get().addOnSuccessListener { snap ->
-            val isNowOn = !snap.exists()
-            val task = if (isNowOn) actionRef.setValue(true) else actionRef.removeValue()
+            val actionRef = db.child(root).child(postId).child(uid)
+            val counterRef = db.child("posts").child(postId).child(field)
 
-            task.addOnSuccessListener {
-                updateCounter(counterRef, if (isNowOn) 1 else -1) { ok, err -> 
-                    onResult(ok, err, isNowOn) 
-                }
-            }.addOnFailureListener { e -> onResult(false, e.message, false) }
+            actionRef.get().addOnSuccessListener { snap ->
+                val isNowOn = !snap.exists()
+                val task = if (isNowOn) actionRef.setValue(true) else actionRef.removeValue()
+
+                task.addOnSuccessListener {
+                    updateCounter(counterRef, if (isNowOn) 1 else -1) { ok, err ->
+                        if (ok && isNowOn) {
+                            UserManager.instance.fetchUser(uid) { userOk, user, _ ->
+                                if (userOk && user != null) {
+                                    val msg = when (tag) {
+                                        Constants.PostActions.LIKE -> "liked your post"
+                                        Constants.PostActions.COMING -> "is coming to your jam"
+                                        Constants.PostActions.APPLY -> "applied to your band"
+                                        else -> ""
+                                    }
+                                    NotificationManager.instance.sendNotification(
+                                        Notification(
+                                            type = tag.lowercase(),
+                                            senderId = uid,
+                                            senderName = user.stageName.ifBlank { "${user.firstName} ${user.lastName}" },
+                                            senderPhotoUrl = user.profilePhotoUrl,
+                                            receiverId = post.ownerId,
+                                            postId = postId,
+                                            postType = post.type,
+                                            message = msg
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                        onResult(ok, err, isNowOn)
+                    }
+                }.addOnFailureListener { e -> onResult(false, e.message, false) }
+            }
         }
     }
 
@@ -139,7 +168,25 @@ class PostManager private constructor() {
 
         val comment = Comment(commentId, postId, uid, user.stageName.ifBlank { "${user.firstName} ${user.lastName}" }, user.profilePhotoUrl, text, System.currentTimeMillis())
         db.child("postComments").child(postId).child(commentId).setValue(comment).addOnSuccessListener {
-            updateCounter(db.child("posts").child(postId).child("commentsCount"), 1) { ok, err -> onResult(ok, err) }
+            updateCounter(db.child("posts").child(postId).child("commentsCount"), 1) { ok, err -> 
+                if (ok) {
+                    db.child("posts").child(postId).child("ownerId").get().addOnSuccessListener { ownerSnap ->
+                        val ownerId = ownerSnap.getValue(String::class.java) ?: ""
+                        NotificationManager.instance.sendNotification(
+                            Notification(
+                                type = "comment",
+                                senderId = uid,
+                                senderName = user.stageName.ifBlank { "${user.firstName} ${user.lastName}" },
+                                senderPhotoUrl = user.profilePhotoUrl,
+                                receiverId = ownerId,
+                                postId = postId,
+                                message = "commented: $text"
+                            )
+                        )
+                    }
+                }
+                onResult(ok, err) 
+            }
         }.addOnFailureListener { e -> onResult(false, e.message) }
     }
 

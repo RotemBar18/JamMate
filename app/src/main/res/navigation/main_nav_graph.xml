@@ -10,6 +10,11 @@
         android:label="Explore" />
 
     <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.example.jammate.ui.fragments.NotificationFragment"
+        android:label="Notifications" />
+
+    <fragment
         android:id="@+id/createPostFragment"
         android:name="com.example.jammate.ui.fragments.CreatePostFragment"
         android:label="Create Post" />

@@ -7,6 +7,11 @@
         android:title="Explore" />
 
     <item
+        android:id="@+id/notificationFragment"
+        android:icon="@drawable/ic_notification"
+        android:title="Notifications" />
+
+    <item
         android:id="@+id/createPostFragment"
         android:icon="@drawable/ic_add"
         android:title="Create" />

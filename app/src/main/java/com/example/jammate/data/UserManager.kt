@@ -1,5 +1,6 @@
 package com.example.jammate.data
 
+import com.example.jammate.model.Notification
 import com.example.jammate.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -49,7 +50,23 @@ class UserManager(
                 "/userFollowers/$targetUid/$currentUid" to if (shouldFollow) true else null
             )
 
-            db.updateChildren(updates).addOnSuccessListener { 
+            db.updateChildren(updates).addOnSuccessListener {
+                if (shouldFollow) {
+                    fetchUser(currentUid) { ok, user, _ ->
+                        if (ok && user != null) {
+                            NotificationManager.instance.sendNotification(
+                                Notification(
+                                    type = "follow",
+                                    senderId = currentUid,
+                                    senderName = user.stageName.ifBlank { "${user.firstName} ${user.lastName}" },
+                                    senderPhotoUrl = user.profilePhotoUrl,
+                                    receiverId = targetUid,
+                                    message = "started following you"
+                                )
+                            )
+                        }
+                    }
+                }
                 onResult(true, null, shouldFollow) 
             }.addOnFailureListener { e -> onResult(false, e.message, !shouldFollow) }
         }

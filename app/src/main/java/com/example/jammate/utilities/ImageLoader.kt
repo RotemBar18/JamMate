@@ -24,39 +24,25 @@ class ImageLoader private constructor(context: Context) {
             return instance ?: throw IllegalStateException(
                 "ImageLoader must be initialized by calling init(context) before use."
             )
+        }
 
+        // Shortcut for easy access
+        fun load(source: Any?, imageView: ImageView, placeHolder: Int = R.raw.loading) {
+            getInstance().loadImage(source, imageView, placeHolder)
         }
     }
 
     fun loadImage(
-        source: Int,
+        source: Any?,
         imageView: ImageView,
         placeHolder: Int = R.raw.loading
     ) {
-        contextRef.get()?.let{
-                context ->
-            Glide
-                .with(context)
-                .load(source)
-                .centerCrop()
-                .placeholder(placeHolder)
-                .into(imageView)
-        }
-    }
-
-    fun loadImage(
-        source: Uri,
-        imageView: ImageView,
-        placeHolder: Int =  R.raw.loading
-    ) {
-        contextRef.get()?.let{
-                context ->
-            Glide
-                .with(context)
-                .load(source)
-                .centerCrop()
-                .placeholder(placeHolder)
-                .into(imageView)
-        }
+        val context = contextRef.get() ?: return
+        Glide.with(context)
+            .load(source)
+            .centerCrop()
+            .placeholder(placeHolder)
+            .error(R.drawable.unavailable_photo)
+            .into(imageView)
     }
 }
