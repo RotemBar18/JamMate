@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -74,7 +73,7 @@
                 android:id="@+id/createProfile_LBL_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Create Your Profile"
+                android:text="@string/create_your_profile"
                 android:textStyle="bold"
                 android:textSize="28sp"
                 android:textColor="@color/app_text_main" />
@@ -84,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="This helps other musicians find you"
+                android:text="@string/this_helps_other_musicians_find_you"
                 android:textColor="@color/app_text_secondary"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -123,7 +122,7 @@
             style="@style/Widget.JamMate.Button.Primary"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Next Step"
+            android:text="@string/next_step"
             app:cornerRadius="16dp"
             app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -132,9 +131,10 @@
             style="@style/Widget.JamMate.Button.Primary"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:text="Finish"
+            android:text="@string/finish"
             android:visibility="gone"
             app:cornerRadius="16dp"
+            android:layout_marginStart="@dimen/small_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/createProfile_GUIDE_actions" />
@@ -144,10 +144,11 @@
             style="@style/Widget.JamMate.Button.Outlined"
             android:layout_width="0dp"
             android:layout_height="56dp"
-            android:text="Back"
+            android:text="@string/back"
             android:visibility="gone"
             app:cornerRadius="16dp"
             app:strokeColor="@color/app_outline"
+            android:layout_marginEnd="@dimen/small_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/createProfile_GUIDE_actions"
             app:layout_constraintStart_toStartOf="parent" />
@@ -157,7 +158,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.4" />
+            app:layout_constraintGuide_percent="0.5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

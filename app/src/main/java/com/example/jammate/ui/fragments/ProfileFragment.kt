@@ -20,7 +20,6 @@ import com.example.jammate.utilities.ImageLoader
 import com.example.jammate.utilities.MediaPicker
 import com.example.jammate.utilities.ThemeManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -97,12 +96,17 @@ class ProfileFragment : Fragment() {
             binding.profileBTNBack.visibility = View.GONE
             binding.profileIMGAvatar.setOnClickListener { openChangePhotoSheet() }
             binding.profileBADGEEditPhoto.setOnClickListener { openChangePhotoSheet() }
+            binding.profileBTNMenu.setIconResource(R.drawable.ic_more)
             binding.profileBTNMenu.setOnClickListener { openProfileMenuSheet() }
         } else {
             binding.profileBTNBack.visibility = View.VISIBLE
             binding.profileBTNBack.setOnClickListener { requireActivity().onBackPressed() }
             binding.profileBADGEEditPhoto.visibility = View.GONE
-            binding.profileBTNMenu.visibility = View.GONE
+            binding.profileBTNMenu.visibility = View.VISIBLE
+            binding.profileBTNMenu.setIconResource(R.drawable.ic_mail)
+            binding.profileBTNMenu.setOnClickListener { sendEmail() }
+            binding.profileBTNFollow.visibility = View.VISIBLE
+            binding.profileBTNFollow.setOnClickListener { toggleFollow() }
         }
     }
 
@@ -187,6 +191,10 @@ class ProfileFragment : Fragment() {
                 binding.profileCHIPGROUPUserChips.removeAllViews()
                 instruments.forEach { addInfoChip(it) }
                 genres.forEach { addInfoChip(it) }
+
+                if (targetUid != auth.currentUser?.uid) {
+                    checkFollowStatus(targetUid)
+                }
 
                 currentUserModel = User(
                     profilePhotoUrl = dbPhotoUrl,
@@ -297,6 +305,42 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun checkFollowStatus(targetUid: String) {
+        val currentUid = auth.currentUser?.uid ?: return
+        UserManager.instance.fetchFollowStatus(listOf(targetUid), currentUid) { followedSet ->
+            updateFollowButton(followedSet.contains(targetUid))
+        }
+    }
+
+    private fun toggleFollow() {
+        val targetUid = userId ?: return
+        binding.profileBTNFollow.isEnabled = false
+        UserManager.instance.toggleFollow(targetUid) { ok, err, isFollowing ->
+            binding.profileBTNFollow.isEnabled = true
+            if (ok) {
+                updateFollowButton(isFollowing)
+                updateStatsUI(targetUid)
+            } else {
+                toast(err ?: "Action failed")
+            }
+        }
+    }
+
+    private fun updateFollowButton(isFollowing: Boolean) {
+        binding.profileBTNFollow.text = if (isFollowing) "Following" else "Follow"
+        if (isFollowing) {
+            binding.profileBTNFollow.setBackgroundColor(resources.getColor(R.color.app_surface, null))
+            binding.profileBTNFollow.setTextColor(resources.getColor(R.color.app_text_main, null))
+            binding.profileBTNFollow.strokeWidth = (1 * resources.displayMetrics.density).toInt()
+            binding.profileBTNFollow.setStrokeColorResource(R.color.app_outline)
+        } else {
+            binding.profileBTNFollow.icon = null
+            binding.profileBTNFollow.setBackgroundColor(resources.getColor(R.color.app_accent, null))
+            binding.profileBTNFollow.setTextColor(resources.getColor(R.color.white, null))
+            binding.profileBTNFollow.strokeWidth = 0
+        }
+    }
+
     private fun addInfoChip(text: String) {
         val chip = Chip(requireContext()).apply {
             this.text = text
@@ -332,21 +376,6 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
 
-        // --- Mail Functionality ---
-        menuBinding.profileOptionsBTNMail.setOnClickListener {
-            dialog.dismiss()
-            val email = currentUserModel?.email
-            if (email.isNullOrBlank()) {
-                toast("No email available for this user")
-            return@setOnClickListener
-        }
-            val intent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:$email")
-                putExtra(Intent.EXTRA_SUBJECT, "Inquiry from JamMate")
-            }
-            startActivity(intent)
-        }
-
         menuBinding.profileOptionsBTNLogout.setOnClickListener {
             dialog.dismiss()
             FirebaseAuth.getInstance().signOut()
@@ -371,6 +400,19 @@ class ProfileFragment : Fragment() {
         }
 
         dialog.show()
+    }
+
+    private fun sendEmail() {
+        val email = currentUserModel?.email
+        if (email.isNullOrBlank()) {
+            toast("No email available for this user")
+            return
+        }
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data = "mailto:$email".toUri()
+            putExtra(Intent.EXTRA_SUBJECT, "Inquiry from JamMate")
+        }
+        startActivity(intent)
     }
 
     private fun toast(msg: String) =

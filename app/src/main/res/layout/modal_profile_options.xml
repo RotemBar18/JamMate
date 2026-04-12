@@ -11,7 +11,7 @@
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings"
+        android:text="@string/settings"
         android:textStyle="bold"
         android:textSize="18sp"
         android:textColor="@color/app_text_main"
@@ -30,7 +30,7 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:text="Light"
+            android:text="@string/light"
             android:textAllCaps="false"
             android:textSize="15sp"
             android:textColor="@color/app_text_main"
@@ -44,7 +44,7 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:text="Dark"
+            android:text="@string/dark"
             android:textAllCaps="false"
             android:textSize="15sp"
             android:textColor="@color/app_text_main"
@@ -58,7 +58,7 @@
         android:id="@+id/profileOptions_BTN_edit"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="Edit profile"
+        android:text="@string/edit_profile"
         android:textAllCaps="false"
         android:textSize="15sp"
         android:textColor="@color/app_text_main"
@@ -72,30 +72,11 @@
         app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/profileOptions_BTN_mail"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="14dp"
-        android:text="Send Email"
-        android:textAllCaps="false"
-        android:textSize="15sp"
-        android:textColor="@color/app_text_main"
-        app:backgroundTint="@color/app_surface"
-        app:cornerRadius="16dp"
-        app:icon="@drawable/ic_mail"
-        app:iconSize="20dp"
-        app:iconPadding="12dp"
-        app:iconTint="@color/app_accent"
-        app:strokeColor="@color/app_outline"
-        app:strokeWidth="1dp" />
-
-
-    <com.google.android.material.button.MaterialButton
         android:id="@+id/profileOptions_BTN_logout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="18dp"
-        android:text="Logout"
+        android:text="@string/logout"
         android:textAllCaps="false"
         android:textSize="15sp"
         android:textColor="@color/app_error"

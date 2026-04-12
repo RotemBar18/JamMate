@@ -46,6 +46,21 @@ class NotificationManager private constructor() {
         db.child("notifications").child(uid).child(notificationId).child("isRead").setValue(true)
     }
 
+    fun markAllAsRead(uid: String) {
+        db.child("notifications").child(uid).get().addOnSuccessListener { snapshot ->
+            val updates = hashMapOf<String, Any>()
+            snapshot.children.forEach { child ->
+                val notification = child.getValue(Notification::class.java)
+                if (notification?.isRead == false) {
+                    updates["${child.key}/isRead"] = true
+                }
+            }
+            if (updates.isNotEmpty()) {
+                db.child("notifications").child(uid).updateChildren(updates)
+            }
+        }
+    }
+
     fun deleteNotification(uid: String, notificationId: String) {
         db.child("notifications").child(uid).child(notificationId).removeValue()
     }

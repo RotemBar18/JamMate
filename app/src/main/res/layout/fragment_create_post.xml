@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_background">
@@ -53,7 +52,7 @@
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Normal Post"
+            android:text="@string/normal_post"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:textSize="16sp"
@@ -71,7 +70,7 @@
             style="@style/Widget.JamMate.Button.Primary"
             android:layout_width="wrap_content"
             android:layout_height="38dp"
-            android:text="Share"
+            android:text="@string/share"
             android:textSize="14sp"
             android:paddingHorizontal="20dp"
             app:cornerRadius="19dp"
@@ -97,18 +96,6 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- Title -->
-            <EditText
-                android:id="@+id/createPost_INPUT_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Post Title"
-                android:textColorHint="#B3FFFFFF"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:background="@null"
-                android:visibility="gone" />
 
             <!-- Location -->
             <LinearLayout
@@ -134,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Add Location"
+                    android:text="@string/add_location"
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -145,7 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="📅 Set Date &amp; Time"
+                android:text="@string/set_date_amp_time"
                 android:textColor="@color/app_accent"
                 android:textSize="15sp"
                 android:textStyle="bold"
@@ -163,7 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Seeking Instruments:"
+                    android:text="@string/seeking_instruments"
                     android:textColor="#B3FFFFFF"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -183,7 +170,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Preferred Genres:"
+                    android:text="@string/preferred_genres"
                     android:textColor="#B3FFFFFF"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -203,7 +190,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Skill Level:"
+                    android:text="@string/skill_level"
                     android:textColor="#B3FFFFFF"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -222,7 +209,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:background="@null"
-                android:hint="Write a caption..."
+                android:hint="@string/write_a_caption"
                 android:textColorHint="#B3FFFFFF"
                 android:textColor="@color/white"
                 android:textSize="16sp"
@@ -246,7 +233,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create New Post"
+            android:text="@string/create_new_post"
             android:textColor="@color/app_text_main"
             android:textSize="28sp"
             android:textStyle="bold"
@@ -257,7 +244,7 @@
             style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:text="Select Photo"
+            android:text="@string/select_photo"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -275,7 +262,7 @@
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_marginTop="20dp"
-            android:text="Select Video"
+            android:text="@string/select_video"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/white"
@@ -316,7 +303,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Publishing..."
+            android:text="@string/publishing"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"

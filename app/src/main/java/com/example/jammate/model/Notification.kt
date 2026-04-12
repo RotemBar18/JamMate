@@ -1,5 +1,7 @@
 package com.example.jammate.model
 
+import com.google.firebase.database.PropertyName
+
 data class Notification(
     var notificationId: String = "",
     var type: String = "", // "like", "comment", "apply", "coming"
@@ -10,6 +12,8 @@ data class Notification(
     var postId: String = "",
     var postType: String = "",
     var timestamp: Long = 0L,
+    @get:PropertyName("isRead")
+    @set:PropertyName("isRead")
     var isRead: Boolean = false,
     var message: String = ""
 )

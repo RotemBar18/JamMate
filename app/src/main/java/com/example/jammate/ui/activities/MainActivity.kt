@@ -67,7 +67,21 @@ class MainActivity : AppCompatActivity(), LocationCallback {
 
     private fun setupNotificationBadge() {
         val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val navHost = supportFragmentManager.findFragmentById(R.id.main_HOST_navHost) as NavHostFragment
+        val navController = navHost.navController
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.notificationFragment) {
+                clearNotificationBadge()
+            }
+        }
+
         NotificationManager.instance.observeNotifications(uid) { list ->
+            if (navController.currentDestination?.id == R.id.notificationFragment) {
+                clearNotificationBadge()
+                return@observeNotifications
+            }
+
             val unreadCount = list.count { !it.isRead }
             if (unreadCount > 0) {
                 val badge = binding.mainNAVBottomNavbar.getOrCreateBadge(R.id.notificationFragment)

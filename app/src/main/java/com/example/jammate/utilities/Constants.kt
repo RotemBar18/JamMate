@@ -2,6 +2,10 @@ package com.example.jammate.utilities
 
 object Constants {
 
+    object App{
+        const val PAGE_SIZE = 15
+        const val MAX_DISTANCE_KM = 99999.0
+    }
     object Activities {
         const val MAIN = "MAIN"
         const val CREATE_PROFILE = "CREATE_PROFILE"

@@ -21,6 +21,8 @@ import com.example.jammate.interfaces.LocationCallback
 import com.example.jammate.model.LocationData
 import com.example.jammate.model.PostUi
 import com.example.jammate.ui.activities.PostViewerActivity
+import com.example.jammate.utilities.Constants.App.MAX_DISTANCE_KM
+import com.example.jammate.utilities.Constants.App.PAGE_SIZE
 import com.example.jammate.utilities.GeoHelper
 import com.example.jammate.utilities.GridInnerSpacing
 import com.example.jammate.utilities.LocationDetector
@@ -154,7 +156,7 @@ class ExploreFragment : Fragment(), LocationCallback {
             gridAdapter.submitList(emptyList()) // Clear adapter for a fresh load
         }
 
-        postManager.fetchPostsPaginated(15, lastPostTimestamp) { ok, posts, err ->
+        postManager.fetchPostsPaginated(PAGE_SIZE, lastPostTimestamp) { ok, posts, err ->
             isLoading = false
             if (!ok) {
                 toast(err ?: "Failed loading posts")
@@ -162,7 +164,7 @@ class ExploreFragment : Fragment(), LocationCallback {
             }
 
             // If we received fewer posts than requested, we've reached the end
-            if (posts.size < 15) {
+            if (posts.size < PAGE_SIZE) {
                 canLoadMore = false
             }
 
@@ -193,7 +195,7 @@ class ExploreFragment : Fragment(), LocationCallback {
             val distanceKm = if (loc?.lat != null && loc.lng != null && postLocation?.lat != null && postLocation.lng != null) {
                 GeoHelper.distanceKm(loc.lat!!, loc.lng!!, postLocation.lat!!, postLocation.lng!!)
             } else {
-                99999.0
+                MAX_DISTANCE_KM
             }
             ui.copy(distanceKm = distanceKm)
         }

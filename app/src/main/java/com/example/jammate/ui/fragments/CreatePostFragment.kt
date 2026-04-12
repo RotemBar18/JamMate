@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.jammate.R
 import com.example.jammate.databinding.FragmentCreatePostBinding
 import com.example.jammate.databinding.ModalPostTypePickerBinding
 import com.example.jammate.model.LocationData
@@ -18,7 +17,6 @@ import com.example.jammate.utilities.Constants
 import com.example.jammate.utilities.PlacePicker
 import com.example.jammate.utilities.PostPublication
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -139,7 +137,6 @@ class CreatePostFragment : Fragment() {
             else -> "Normal Post"
         }
 
-        binding.createPostINPUTTitle.isVisible = (currentType == Constants.PostTypes.JAM_SESSION)
         binding.createPostLBLDateTime.isVisible = (currentType == Constants.PostTypes.JAM_SESSION)
         binding.createPostLAYMemberFields.isVisible = (currentType == Constants.PostTypes.BAND_MEMBER)
         

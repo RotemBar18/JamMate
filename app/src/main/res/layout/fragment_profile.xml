@@ -92,7 +92,7 @@
                             android:src="@drawable/ic_profile"
                             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.JamMate.Circle"
                             app:strokeColor="@color/app_outline"
-                            app:strokeWidth="2dp"/>
+                            app:strokeWidth="2dp" />
 
                         <com.google.android.material.card.MaterialCardView
                             android:id="@+id/profile_BADGE_editPhoto"
@@ -111,7 +111,7 @@
                                 android:padding="7dp"
                                 android:src="@drawable/ic_camera"
                                 app:tint="@color/app_text_main"
-                                android:contentDescription="Change profile photo" />
+                                android:contentDescription="@string/change_profile_photo" />
                         </com.google.android.material.card.MaterialCardView>
                     </FrameLayout>
 
@@ -164,11 +164,32 @@
                         app:layout_constraintTop_toBottomOf="@id/profile_LBL_location"
                         tools:text="Professional" />
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/profile_BTN_follow"
+                        style="@style/Widget.Material3.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="4dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:text="@string/follow"
+                        android:textAllCaps="false"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        app:cornerRadius="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/profile_LAY_avatarImg"
+                        app:layout_constraintTop_toBottomOf="@id/profile_LBL_level"
+                        tools:visibility="visible" />
+
 
                     <LinearLayout
                         android:id="@+id/profile_LAY_stats"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:baselineAligned="false"
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/default_margin"
@@ -193,7 +214,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Posts"
+                                android:text="@string/posts"
                                 android:textColor="@color/app_text_secondary"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -217,7 +238,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Likes"
+                                android:text="@string/likes"
                                 android:textColor="@color/app_text_secondary"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -241,7 +262,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Followers"
+                                android:text="@string/followers"
                                 android:textColor="@color/app_text_secondary"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -262,7 +283,7 @@
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:text="Posts"
+                    android:text="@string/posts"
                     android:textAllCaps="false"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -276,7 +297,7 @@
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:text="About"
+                    android:text="@string/about"
                     android:textAllCaps="false"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -330,7 +351,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="About Me"
+                                android:text="@string/about_me"
                                 android:textColor="@color/app_text_main"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
@@ -367,7 +388,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Expertise &amp; Genres"
+                                android:text="@string/expertise_amp_genres"
                                 android:textColor="@color/app_text_main"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
