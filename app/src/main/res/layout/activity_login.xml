@@ -8,7 +8,6 @@
     android:background="@color/white"
     tools:context=".ui.activities.LoginActivity">
 
-    <!-- This title reinforces the brand identity with bold, premium typography. -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/login_LBL_title"
         android:layout_width="wrap_content"
@@ -24,7 +23,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <!-- This tagline provides context and welcomes the user to the platform. -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/login_LBL_subtitle"
         android:layout_width="0dp"
@@ -39,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/login_LBL_title" />
 
-    <!-- This dynamic animation serves as the main visual focal point of the landing page. -->
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/login_LOT_animation"
         android:layout_width="320dp"
@@ -47,13 +45,14 @@
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/login_BTN_signIn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/login_LBL_subtitle"
+        app:layout_constraintVertical_bias="0.485"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/jam_animation" />
 
-    <!-- This primary action button opens the authentication options modal. -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/login_BTN_signIn"
         style="@style/Widget.JamMate.Button.Primary"
@@ -66,22 +65,8 @@
         app:icon="@drawable/ic_chevron_right"
         app:iconGravity="end"
         app:iconPadding="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/login_LBL_terms" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-    <!-- This disclaimer text ensures users are aware of the terms of service. -->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/login_LBL_terms"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginBottom="32dp"
-        android:alpha="0.7"
-        android:gravity="center"
-        android:text="By continuing, you agree to our Terms &amp; Privacy Policy"
-        android:textColor="@color/app_text_secondary"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

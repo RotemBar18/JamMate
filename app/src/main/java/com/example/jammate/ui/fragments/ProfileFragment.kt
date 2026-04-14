@@ -378,9 +378,12 @@ class ProfileFragment : Fragment() {
 
         menuBinding.profileOptionsBTNLogout.setOnClickListener {
             dialog.dismiss()
-            FirebaseAuth.getInstance().signOut()
-            startActivity(Intent(requireContext(), LoginActivity::class.java))
-            requireActivity().finish()
+            com.firebase.ui.auth.AuthUI.getInstance()
+                .signOut(requireContext())
+                .addOnCompleteListener {
+                    startActivity(Intent(requireContext(), LoginActivity::class.java))
+                    requireActivity().finish()
+                }
         }
 
         // --- Persistent Theme Toggle ---
