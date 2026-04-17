@@ -12,7 +12,8 @@ import com.example.jammate.model.Comment
 import com.example.jammate.utilities.ImageLoader
 
 // Manages the list of user comments and how they appear on screen.
-class CommentAdapter : ListAdapter<Comment, CommentAdapter.CommentViewHolder>(CommentDiffCallback()) {
+class
+CommentAdapter : ListAdapter<Comment, CommentAdapter.CommentViewHolder>(CommentDiffCallback()) {
 
     // Holds references to the views for each individual comment item.
     class CommentViewHolder(val binding: ItemCommentBinding) : RecyclerView.ViewHolder(binding.root)
