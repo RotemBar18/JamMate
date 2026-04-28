@@ -19,7 +19,7 @@
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="What are you posting?"
+        android:text="@string/what_are_you_posting"
         android:textStyle="bold"
         android:textSize="20sp"
         android:textColor="@color/app_text_main"
@@ -28,7 +28,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/postTypePicker_BTN_normal"
         android:layout_width="match_parent"
-        android:text="Normal Post"
+        android:text="@string/normal_post"
         app:icon="@drawable/ic_normal_post"
         android:layout_height="50dp"
         android:textAllCaps="false"
@@ -48,7 +48,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/postTypePicker_BTN_jam"
         android:layout_width="match_parent"
-        android:text="Jam Session"
+        android:text="@string/jam_session"
         app:icon="@drawable/ic_jam_session"
         android:layout_height="50dp"
         android:textAllCaps="false"
@@ -68,7 +68,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/postTypePicker_BTN_member"
         android:layout_width="match_parent"
-        android:text="Band Member"
+        android:text="@string/band_member"
         app:icon="@drawable/ic_band_member"
         android:layout_height="50dp"
         android:textAllCaps="false"

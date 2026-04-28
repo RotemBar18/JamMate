@@ -3,7 +3,6 @@ package com.example.jammate.ui.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.viewpager2.widget.ViewPager2
@@ -20,8 +19,7 @@ import com.example.jammate.databinding.ModalDeletePostBinding
 import com.example.jammate.ui.fragments.CommentsBottomSheetFragment
 import com.example.jammate.utilities.Constants
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+
 
 // This activity displays posts in a full-screen vertical pager.
 class PostViewerActivity : AppCompatActivity() {
@@ -214,7 +212,7 @@ class PostViewerActivity : AppCompatActivity() {
     }
 
     private fun toggleAction(post: Post, action: String) {
-        val postId = post.postId.orEmpty()
+        val postId = post.postId
         if (postId.isBlank()) return
 
         PostManager.instance.togglePostAction(postId, action) { ok, err, isNowOn ->

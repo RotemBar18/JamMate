@@ -1,12 +1,7 @@
 package com.example.jammate.adapters
 
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.net.Uri
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -29,6 +24,7 @@ import com.example.jammate.data.PostManager
 import com.example.jammate.utilities.Constants
 import com.example.jammate.utilities.ImageLoader
 import com.google.android.material.button.MaterialButton
+import androidx.core.net.toUri
 
 // adapter for the fullscreen post viewer
 class PostViewerPagerAdapter(
@@ -124,11 +120,11 @@ class PostViewerPagerAdapter(
     private fun bindHeader(binding: ItemPostViewerPageBinding, item: PostUi) {
         binding.postViewerBTNBack.setOnClickListener { onBack() }
         binding.postViewerLBLUserName.text = item.owner.stageName.ifBlank { "${item.owner.firstName} ${item.owner.lastName}" }
-        binding.postViewerLBLLocation.text = item.post.location?.name ?: item.owner.location.orEmpty()
+        binding.postViewerLBLLocation.text = item.post.location?.name ?: item.owner.location
         
-        val photoUrl = item.ownerPhotoUrl.ifBlank { item.owner.profilePhotoUrl }.orEmpty()
+        val photoUrl = item.ownerPhotoUrl.ifBlank { item.owner.profilePhotoUrl }
         if (photoUrl.isNotBlank()) {
-            ImageLoader.getInstance().loadImage(Uri.parse(photoUrl), binding.postViewerIMGAvatar, R.drawable.ic_profile)
+            ImageLoader.getInstance().loadImage(photoUrl.toUri(), binding.postViewerIMGAvatar, R.drawable.ic_profile)
         } else {
             binding.postViewerIMGAvatar.setImageResource(R.drawable.ic_profile)
         }
@@ -160,13 +156,12 @@ class PostViewerPagerAdapter(
         val kind = post.kind()
 
 
-        if (!media.isVideo) ImageLoader.getInstance().loadImage(Uri.parse(media.url), binding.postViewerIMGMedia)
+        if (!media.isVideo && media.url.isNotBlank()) ImageLoader.getInstance().loadImage(media.url.toUri(), binding.postViewerIMGMedia)
 
         binding.postViewerLAYTagsContainer.removeAllViews()
         if (kind == PostKind.MEMBER) {
             binding.postViewerSCROLLTags.isVisible = true
             val tags = post.instrument.plus(post.genre)
-            val context = binding.root.context
 
             val inflater = LayoutInflater.from(binding.root.context)
             tags.forEach { tag ->
@@ -249,12 +244,12 @@ class PostViewerPagerAdapter(
             if (!playerListenerAttached) { player.addListener(playerListener); playerListenerAttached = true }
             val binding = getBindingAt(position) ?: return@post
             val media = getItem(position).post.mediaInfo()
-            if (!media.isVideo) { stopAt( position, player); return@post }
+            if (!media.isVideo || media.url.isBlank()) { stopAt( position, player); return@post }
             binding.postViewerLOTLoading.isVisible = true
             binding.postViewerLOTLoading.playAnimation()
             binding.postViewerIMGMedia.isGone = true
             binding.postViewerPLYVideo.apply { isVisible = true; this.player = player }
-            player.setMediaItem(MediaItem.fromUri(Uri.parse(media.url)))
+            player.setMediaItem(MediaItem.fromUri(media.url.toUri()))
             player.prepare()
             player.playWhenReady = true
         }

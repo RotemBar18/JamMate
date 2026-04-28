@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -14,7 +13,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.jammate.App
 import com.example.jammate.App.Companion.toast
 import com.example.jammate.adapters.ProfileGridAdapter
 import com.example.jammate.data.PostManager
@@ -106,7 +104,6 @@ class ExploreFragment : Fragment(), LocationCallback {
             }
         })
 
-        // 🔥 Add spacing
         val spacingDp = 2
         val spacingPx = (spacingDp * resources.displayMetrics.density).toInt()
 
@@ -217,7 +214,6 @@ class ExploreFragment : Fragment(), LocationCallback {
         allUiPosts.addAll(postsWithDistance)
         allUiPosts = allUiPosts.distinctBy { it.post.postId }.toMutableList()
 
-        // Sort by latest, then following, then distance
         allUiPosts.sortWith(
             compareByDescending<PostUi> { it.post.createdAt }
                 .thenByDescending { it.isFollowingOwner }

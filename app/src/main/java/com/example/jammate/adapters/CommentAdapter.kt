@@ -10,6 +10,7 @@ import com.example.jammate.R
 import com.example.jammate.databinding.ItemCommentBinding
 import com.example.jammate.model.Comment
 import com.example.jammate.utilities.ImageLoader
+import androidx.core.net.toUri
 
 // Manages the list of user comments and how they appear on screen.
 class
@@ -38,9 +39,10 @@ CommentAdapter : ListAdapter<Comment, CommentAdapter.CommentViewHolder>(CommentD
         )
 
         // Loads the profile picture or sets a default icon if the URL is empty.
-        if (item.ownerPhotoUrl.isNotBlank()) {
+        val photoUrl = item.ownerPhotoUrl
+        if (photoUrl.isNotBlank()) {
             ImageLoader.getInstance().loadImage(
-                android.net.Uri.parse(item.ownerPhotoUrl),
+                photoUrl.toUri(),
                 binding.commentIMGAvatar,
                 R.drawable.ic_profile
             )

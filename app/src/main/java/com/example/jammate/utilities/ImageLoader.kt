@@ -1,7 +1,7 @@
 package com.example.jammate.utilities
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.net.Uri
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.example.jammate.R
@@ -32,6 +32,7 @@ class ImageLoader private constructor(context: Context) {
         }
     }
 
+    @SuppressLint("ResourceType")
     fun loadImage(
         source: Any?,
         imageView: ImageView,

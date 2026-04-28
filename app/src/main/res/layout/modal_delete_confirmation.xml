@@ -11,7 +11,7 @@
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Are you sure?"
+        android:text="@string/are_you_sure"
         android:textStyle="bold"
         android:textSize="18sp"
         android:textColor="@color/app_text_main"
@@ -20,7 +20,7 @@
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="This action cannot be undone."
+        android:text="@string/this_action_cannot_be_undone"
         android:textSize="14sp"
         android:textColor="@color/app_text_secondary"
         android:layout_marginBottom="18dp"/>
@@ -29,7 +29,7 @@
         android:id="@+id/deleteConfirm_BTN_delete"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="Yes"
+        android:text="@string/yes"
         android:textAllCaps="false"
         android:textSize="15sp"
         android:textColor="@color/app_error"
@@ -43,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="14dp"
-        android:text="Cancel"
+        android:text="@string/cancel"
         android:textAllCaps="false"
         android:textSize="15sp"
         android:textColor="@color/app_text_secondary"

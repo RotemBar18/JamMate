@@ -1,6 +1,5 @@
 package com.example.jammate.adapters
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -10,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jammate.databinding.ItemProfileGridBinding
 import com.example.jammate.model.PostUi
 import com.example.jammate.utilities.ImageLoader
+import androidx.core.net.toUri
 
 // This adapter handles the grid display of posts on the profile page.
 class ProfileGridAdapter(
@@ -33,7 +33,7 @@ class ProfileGridAdapter(
         val binding = holder.binding
 
         ImageLoader.getInstance().loadImage(
-            Uri.parse(post.mediaUrl.orEmpty()),
+            post.mediaUrl.orEmpty().toUri(),
             binding.profileGridIMGPostImg,
         )
 

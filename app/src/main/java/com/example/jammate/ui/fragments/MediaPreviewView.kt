@@ -65,7 +65,4 @@ class MediaPreviewView : FrameLayout {
         visibility = GONE
     }
 
-    fun hasMedia(): Boolean = currentUri != null
-    fun getUri(): Uri? = currentUri
-    fun getMediaType(): String? = currentType
 }

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -14,6 +13,7 @@ import com.example.jammate.databinding.FragmentCreatePostBinding
 import com.example.jammate.databinding.ModalPostTypePickerBinding
 import com.example.jammate.model.LocationData
 import com.example.jammate.model.Post
+import com.example.jammate.utilities.ChipHelper
 import com.example.jammate.utilities.Constants
 import com.example.jammate.utilities.PlacePicker
 import com.example.jammate.utilities.PostPublication
@@ -23,7 +23,6 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import java.util.Calendar
 
-// Manages the immersive post creation flow, including media selection and type-specific details.
 class CreatePostFragment : Fragment() {
 
     private var _binding: FragmentCreatePostBinding? = null
@@ -51,7 +50,6 @@ class CreatePostFragment : Fragment() {
         updateTypeUi()
     }
 
-    // Configures the media selection behavior and handles the transition to the editor.
     private fun initMediaPicker() {
         val picker = com.example.jammate.utilities.MediaPicker(this) { uri, type ->
             pickedUri = uri
@@ -70,7 +68,6 @@ class CreatePostFragment : Fragment() {
         }
     }
 
-    // Connects UI buttons to their respective logic like location picking and type selection.
     private fun initInteractions() {
         placePicker = PlacePicker(this, requireContext(), android.widget.EditText(requireContext())) { loc ->
             selectedLocation = loc
@@ -88,14 +85,12 @@ class CreatePostFragment : Fragment() {
         ChipHelper.buildChips(requireContext(), binding.createPostCHIPSSkill, listOf("Beginner", "Intermediate","Advanced", "Professional"))
     }
 
-    // Displays the post editing interface once media has been selected.
     private fun showEditor() {
         binding.createPostLAYInitialPicker.isVisible = false
         binding.createPostLAYEditor.isVisible = true
         binding.createPostVIEWOverlay.isVisible = true
     }
 
-    // Returns to the initial media selection screen.
     private fun showPicker() {
         binding.createPostLAYInitialPicker.isVisible = true
         binding.createPostLAYEditor.isVisible = false
@@ -103,7 +98,6 @@ class CreatePostFragment : Fragment() {
         binding.createPostMEDIAPreview.clear()
     }
 
-    // Opens a bottom sheet allowing the user to choose between Normal, Jam, or Member posts.
     private fun showTypePicker() {
         val dialog = BottomSheetDialog(requireContext())
         val binding2 = ModalPostTypePickerBinding.inflate(layoutInflater)
@@ -130,7 +124,6 @@ class CreatePostFragment : Fragment() {
         dialog.show()
     }
 
-    // Updates the visibility of overlay fields based on the selected post type.
     private fun updateTypeUi() {
         binding.createPostBTNTypeSelector.text = when (currentType) {
             Constants.PostTypes.JAM_SESSION -> "Jam Session"
@@ -146,7 +139,6 @@ class CreatePostFragment : Fragment() {
         }
     }
 
-    // Launches the date and time pickers for Jam Session posts.
     private fun showDateTimePicker() {
         val datePicker = MaterialDatePicker.Builder.datePicker().setTitleText("Select Date").build()
         datePicker.addOnPositiveButtonClickListener { timeLong ->
@@ -169,7 +161,6 @@ class CreatePostFragment : Fragment() {
         datePicker.show(parentFragmentManager, "date")
     }
 
-    // Validates inputs, shows the loading animation, and uploads the post to Firebase.
     private fun publishPost() {
         val caption = binding.createPostINPUTCaption.text.toString().trim()
         if (caption.isBlank()) { toast("Write a caption first!"); return }

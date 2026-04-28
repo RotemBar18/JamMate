@@ -23,7 +23,6 @@ class PostManager private constructor() {
     private val storage = FirebaseStorage.getInstance().reference
 
     companion object {
-        private const val TAG = "PostManager"
         val instance: PostManager by lazy { PostManager() }
     }
 
@@ -42,7 +41,7 @@ class PostManager private constructor() {
             this.createdAt = System.currentTimeMillis()
         }
 
-        val updates = hashMapOf<String, Any>(
+        val updates = hashMapOf(
             "/posts/$postId" to post,
             "/postsByType/${post.type}/$postId" to post.createdAt,
             "/userPosts/$uid/$postId" to post.createdAt
@@ -212,7 +211,7 @@ class PostManager private constructor() {
                 data.value = maxOf(0, cur + delta)
                 return Transaction.success(data)
             }
-            override fun onComplete(e: com.google.firebase.database.DatabaseError?, b: Boolean, s: DataSnapshot?) {
+            override fun onComplete(e: DatabaseError?, b: Boolean, s: DataSnapshot?) {
                 onResult(e == null, e?.message)
             }
         })
@@ -284,7 +283,7 @@ class PostManager private constructor() {
                 PostUi(post = p, distanceKm = 0.0, owner = owner, ownerPhotoUrl = owner.profilePhotoUrl)
             }
 
-            val ids = initialUiList.mapNotNull { it.post.postId }
+            val ids = initialUiList.map { it.post.postId }
             fetchLikedPostIds(ids) { likedIds ->
                 fetchMyPostIds("jamArrivals", uid) { arrivalIds ->
                     fetchMyPostIds("memberApplications", uid) { applyIds ->
@@ -318,4 +317,5 @@ class PostManager private constructor() {
             }.addOnFailureListener { if (--remaining == 0) onDone(posts) }
         }
     }
+
 }

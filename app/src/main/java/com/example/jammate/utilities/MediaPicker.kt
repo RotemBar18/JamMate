@@ -22,5 +22,4 @@ class MediaPicker(
     fun openImage() = pickImage.launch("image/*")
     fun openVideo() = pickVideo.launch("video/*")
 
-    fun openProfileImage() = openImage()
 }

@@ -3,7 +3,7 @@ package com.example.jammate.utilities
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.firebase.auth.FirebaseAuth
-
+import androidx.core.content.edit
 
 
 object ThemeManager {
@@ -38,7 +38,7 @@ object ThemeManager {
         val key = getThemeKeyForCurrentUser()
         if (key != null) {
             val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            prefs.edit().putInt(key, mode).apply()
+            prefs.edit { putInt(key, mode) }
         }
         AppCompatDelegate.setDefaultNightMode(mode)
     }

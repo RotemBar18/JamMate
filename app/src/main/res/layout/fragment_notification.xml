@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:alpha="0.5"
-            android:text="No notifications yet"
+            android:text="@string/no_notifications_yet"
             android:textAppearance="?attr/textAppearanceTitleMedium" />
 
     </LinearLayout>

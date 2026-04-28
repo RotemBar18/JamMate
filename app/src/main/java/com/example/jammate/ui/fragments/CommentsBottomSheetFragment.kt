@@ -76,7 +76,6 @@ class CommentsBottomSheetFragment : BottomSheetDialogFragment() {
             adapter.submitList(comments)
             binding.commentsLBLTitle.text = if (comments.isEmpty()) "No Comments" else "${comments.size} Comments"
             
-            // Only notify activity if we actually have data or it's a legitimate empty state
             onCommentAdded?.invoke(comments.size)
         }
     }

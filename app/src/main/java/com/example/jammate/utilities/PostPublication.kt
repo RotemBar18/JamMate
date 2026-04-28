@@ -5,7 +5,7 @@ import com.example.jammate.data.PostManager
 import com.example.jammate.model.Post
 
 class PostPublication(
-    private val postManager: PostManager = PostManager.Companion.instance
+    private val postManager: PostManager = PostManager.instance
 ) {
 
     fun publish(

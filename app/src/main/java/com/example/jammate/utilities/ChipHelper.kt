@@ -1,4 +1,4 @@
-package com.example.jammate.ui.fragments
+package com.example.jammate.utilities
 
 import android.content.Context
 import android.view.View
@@ -40,10 +40,4 @@ object ChipHelper {
         return group.findViewById<Chip>(checkedId)?.text?.toString()
     }
 
-    fun clearChecks(group: ChipGroup) {
-        for (i in 0 until group.childCount) {
-            val chip = group.getChildAt(i) as? Chip ?: continue
-            chip.isChecked = false
-        }
-    }
 }

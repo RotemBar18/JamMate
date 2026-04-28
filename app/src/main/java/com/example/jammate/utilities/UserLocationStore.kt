@@ -1,9 +1,8 @@
 package com.example.jammate.utilities
 
 import android.content.Context
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.jammate.model.LocationData
+import androidx.core.content.edit
 
 object UserLocationStore {
 
@@ -33,11 +32,11 @@ object UserLocationStore {
     fun save(context: Context, location: LocationData) {
         lastLocation = location
         val sp = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-        sp.edit()
-            .putFloat(KEY_LAT, (location.lat ?: 0.0).toFloat())
-            .putFloat(KEY_LNG, (location.lng ?: 0.0).toFloat())
-            .putLong(KEY_UPDATED, location.updatedAt)
-            .apply()
+        sp.edit {
+            putFloat(KEY_LAT, (location.lat ?: 0.0).toFloat())
+                .putFloat(KEY_LNG, (location.lng ?: 0.0).toFloat())
+                .putLong(KEY_UPDATED, location.updatedAt)
+        }
     }
 
     fun isFresh(maxAgeMs: Long): Boolean {

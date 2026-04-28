@@ -3,7 +3,6 @@ package com.example.jammate.utilities
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.GridLayoutManager
 
 class GridInnerSpacing(
     private val spanCount: Int,
