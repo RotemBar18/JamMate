@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.google.firebase.auth.FirebaseAuth
 
 
-/**
- * Manages persistent theme selection (Light/Dark).
- */
+
 object ThemeManager {
     private const val PREFS_NAME = "jam_mate_prefs"
     private const val KEY_THEME = "theme_mode"

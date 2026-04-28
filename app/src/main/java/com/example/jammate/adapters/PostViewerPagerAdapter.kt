@@ -30,7 +30,7 @@ import com.example.jammate.utilities.Constants
 import com.example.jammate.utilities.ImageLoader
 import com.google.android.material.button.MaterialButton
 
-// This adapter manages the vertical scrolling list of posts in the full-screen viewer.
+// adapter for the fullscreen post viewer
 class PostViewerPagerAdapter(
     private val onBack: () -> Unit,
     private val onLike: (Post) -> Unit = {},
@@ -42,7 +42,6 @@ class PostViewerPagerAdapter(
     private val onMoreClick: (Post) -> Unit = {}
 ) : ListAdapter<PostUi, PostViewerPagerAdapter.PostViewHolder>(PostDiffCallback()) {
 
-    // Holds references to the UI elements for a single post page.
     class PostViewHolder(val binding: ItemPostViewerPageBinding) : RecyclerView.ViewHolder(binding.root) {
         var isExpanded = false
     }
@@ -51,7 +50,6 @@ class PostViewerPagerAdapter(
     private var currentPosition: Int = -1
     private var playerListenerAttached = false
 
-    // Listens for video playback status changes to update the loading animation.
     private val playerListener = object : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: Int) {
             val binding = visibleBindingOrNull() ?: return
@@ -113,7 +111,6 @@ class PostViewerPagerAdapter(
         bindInteractions(binding, item, media.hasMedia)
     }
 
-    // clears media state to ensure clean view recycling.
     private fun resetState(binding: ItemPostViewerPageBinding) {
         hideLoader(binding)
         binding.postViewerPLYVideo.apply {
@@ -123,7 +120,7 @@ class PostViewerPagerAdapter(
         binding.postViewerIMGMedia.isVisible = true
     }
 
-    // user info, profile clicks, and follow button logic.
+    // user info, profile clicks, and follow button logic
     private fun bindHeader(binding: ItemPostViewerPageBinding, item: PostUi) {
         binding.postViewerBTNBack.setOnClickListener { onBack() }
         binding.postViewerLBLUserName.text = item.owner.stageName.ifBlank { "${item.owner.firstName} ${item.owner.lastName}" }
@@ -147,7 +144,6 @@ class PostViewerPagerAdapter(
         binding.postViewerBTNMore.setOnClickListener { onMoreClick(item.post) }
     }
 
-    // Toggles the visibility and text of the follow button based on the owner.
     private fun updateFollowStatus(binding: ItemPostViewerPageBinding, item: PostUi) {
         val currentUid = PostManager.instance.getCurrentUid()
         if (item.post.ownerId == currentUid) {
@@ -158,7 +154,6 @@ class PostViewerPagerAdapter(
         }
     }
 
-    // Renders images, videos, and dynamic tags for the post content.
     private fun bindPostContent(holder: PostViewHolder, item: PostUi, media: MediaInfo) {
         val post = item.post
         val binding = holder.binding
@@ -167,41 +162,23 @@ class PostViewerPagerAdapter(
 
         if (!media.isVideo) ImageLoader.getInstance().loadImage(Uri.parse(media.url), binding.postViewerIMGMedia)
 
-        // Dynamically populates the tag container for member posts.
         binding.postViewerLAYTagsContainer.removeAllViews()
         if (kind == PostKind.MEMBER) {
             binding.postViewerSCROLLTags.isVisible = true
             val tags = post.instrument.plus(post.genre)
             val context = binding.root.context
-            
+
+            val inflater = LayoutInflater.from(binding.root.context)
             tags.forEach { tag ->
-                val tagButton = MaterialButton(context, null, com.google.android.material.R.attr.materialButtonOutlinedStyle).apply {
-                    id = View.generateViewId()
-                    text = tag
-                    isClickable = false
-                    isFocusable = false
-                    textSize = 11f
-                    setTextColor(Color.WHITE)
-                    strokeColor = ColorStateList.valueOf(Color.WHITE)
-                    strokeWidth = (resources.displayMetrics.density * 1).toInt()
-                    cornerRadius = (resources.displayMetrics.density * 8).toInt()
-                    backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
-                    minHeight = 0
-                    minimumHeight = 0
-                    setPadding((resources.displayMetrics.density * 8).toInt(), 0, (resources.displayMetrics.density * 8).toInt(), 0)
-                    
-                    layoutParams = LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        (resources.displayMetrics.density * 26).toInt()
-                    ).apply { marginEnd = (resources.displayMetrics.density * 6).toInt() }
-                }
+                val tagButton = inflater.inflate(R.layout.item_tag, binding.postViewerLAYTagsContainer, false) as MaterialButton
+                tagButton.text = tag
                 binding.postViewerLAYTagsContainer.addView(tagButton)
             }
         } else {
             binding.postViewerSCROLLTags.isGone = true
         }
 
-        // Sets the caption and handles the expand toggle.
+        // set the caption and handles the expand toggle.
         binding.postViewerLBLDescription.text = post.description
         binding.postViewerLBLDescription.maxLines = if (holder.isExpanded) 100 else 2
         binding.postViewerLBLDescription.setOnClickListener {
@@ -210,7 +187,6 @@ class PostViewerPagerAdapter(
         }
     }
 
-    // Connects Like, Comment, and primary actions to their respective callbacks.
     private fun bindInteractions(binding: ItemPostViewerPageBinding, item: PostUi, hasMedia: Boolean) {
         val post = item.post
         binding.postViewerBTNLikeCount.text = post.likesCount.toString()
@@ -230,7 +206,6 @@ class PostViewerPagerAdapter(
     }
 
 
-    // Updates the heart icon color to reflect whether the user liked the post.
     private fun updateLikeStatus(binding: ItemPostViewerPageBinding, item: PostUi, hasMedia: Boolean) {
         val context = binding.root.context
         val color = if (item.isLikedByMe) ContextCompat.getColor(context, android.R.color.holo_red_light) 
@@ -238,7 +213,7 @@ class PostViewerPagerAdapter(
         binding.postViewerBTNLike.setColorFilter(color)
     }
 
-    // Manages text and color for primary actions like Register or Apply.
+    // manage text and color for primary actions like register or apply
     private fun updateActionStatus(binding: ItemPostViewerPageBinding, item: PostUi, hasMedia: Boolean) {
         val kind = item.post.kind()
         if (kind == PostKind.NORMAL) {
@@ -260,12 +235,12 @@ class PostViewerPagerAdapter(
         binding.postViewerLBLPrimaryAction.setTextColor(color)
     }
 
-    // Stops the loading animation.
+    // stop the loading animation
     private fun hideLoader(binding: ItemPostViewerPageBinding) {
         binding.postViewerLOTLoading.apply { cancelAnimation(); isGone = true }
     }
 
-    // Prepares and plays video content for the currently selected page.
+    // prepares and plays video content for the currently selected page
     fun playAt(pager: ViewPager2, position: Int, player: ExoPlayer) {
         pager.post {
             if (position !in 0 until itemCount) return@post
@@ -285,7 +260,7 @@ class PostViewerPagerAdapter(
         }
     }
 
-    // Stops video playback and detaches the player.
+    // stop video playback and detach the player
     fun stopAt(position: Int, player: ExoPlayer) {
         val binding = getBindingAt(position) ?: return
         hideLoader(binding)
@@ -294,31 +269,45 @@ class PostViewerPagerAdapter(
         binding.postViewerIMGMedia.isVisible = true
     }
 
-    // Retrieves the view binding for a specific adapter position.
+    // retrieve the view binding for a specific adapter position
     private fun getBindingAt(position: Int): ItemPostViewerPageBinding? {
         val rv = currentPager?.getChildAt(0) as? RecyclerView ?: return null
         return (rv.findViewHolderForAdapterPosition(position) as? PostViewHolder)?.binding
     }
 
-    // Returns the binding for the page currently visible to the user.
+    // returns the binding for the page currently visible to the user
     private fun visibleBindingOrNull() = getBindingAt(currentPosition)
 
-    // Efficiently updates the list by identifying specific item differences.
+    // update the list by specific item differences
     private class PostDiffCallback : DiffUtil.ItemCallback<PostUi>() {
-        override fun areItemsTheSame(old: PostUi, new: PostUi) = old.post.postId == new.post.postId
-        override fun areContentsTheSame(old: PostUi, new: PostUi) = old == new
+
+        override fun areItemsTheSame(old: PostUi, new: PostUi): Boolean {
+            return old.post.postId == new.post.postId
+        }
+
+        override fun areContentsTheSame(old: PostUi, new: PostUi): Boolean {
+            return old == new
+        }
+
         override fun getChangePayload(old: PostUi, new: PostUi): Any? {
-            val likeChanged = old.post.likesCount != new.post.likesCount || old.isLikedByMe != new.isLikedByMe
-            val actionChanged = old.isAppliedByMe != new.isAppliedByMe || old.isComingByMe != new.isComingByMe
-            val followChanged = old.isFollowingOwner != new.isFollowingOwner
-            val commentChanged = old.post.commentsCount != new.post.commentsCount
-            return when {
-                likeChanged -> Constants.Payloads.LIKE_UPDATE
-                actionChanged -> Constants.Payloads.ACTION_UPDATE
-                followChanged -> Constants.Payloads.FOLLOW_UPDATE
-                commentChanged -> Constants.Payloads.COMMENT_UPDATE
-                else -> null
+
+            if (old.post.likesCount != new.post.likesCount || old.isLikedByMe != new.isLikedByMe) {
+                return Constants.Payloads.LIKE_UPDATE
             }
+
+            if (old.isAppliedByMe != new.isAppliedByMe || old.isComingByMe != new.isComingByMe) {
+                return Constants.Payloads.ACTION_UPDATE
+            }
+
+            if (old.isFollowingOwner != new.isFollowingOwner) {
+                return Constants.Payloads.FOLLOW_UPDATE
+            }
+
+            if (old.post.commentsCount != new.post.commentsCount) {
+                return Constants.Payloads.COMMENT_UPDATE
+            }
+
+            return null
         }
     }
 }

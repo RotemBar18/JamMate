@@ -10,11 +10,11 @@ data class LocationData(
     var lng: Double? = 0.0,
     var updatedAt : Long = 0,
 
-    // for easy filtering now
-    var cityKey: String = "",   // "tel_aviv", "jerusalem"
+
+    var cityKey: String = "",
 
     // for later (Option B)
-    var geohash: String = ""    // leave empty for now, fill later
+    var geohash: String = ""
 ){
     companion object {
         fun fromRaw(lat: Double, lng: Double): LocationData {

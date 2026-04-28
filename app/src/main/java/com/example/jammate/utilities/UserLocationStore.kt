@@ -1,6 +1,8 @@
 package com.example.jammate.utilities
 
 import android.content.Context
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.jammate.model.LocationData
 
 object UserLocationStore {
@@ -41,11 +43,5 @@ object UserLocationStore {
     fun isFresh(maxAgeMs: Long): Boolean {
         val t = lastLocation?.updatedAt ?: return false
         return System.currentTimeMillis() - t <= maxAgeMs
-    }
-
-    fun clear(context: Context) {
-        lastLocation = null
-        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-            .edit().clear().apply()
     }
 }

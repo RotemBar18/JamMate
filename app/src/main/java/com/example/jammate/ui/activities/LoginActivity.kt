@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.jammate.App.Companion.toast
 import com.example.jammate.R
 import com.example.jammate.databinding.ActivityLoginBinding
 import com.example.jammate.databinding.ModalAuthOptionsBinding
@@ -140,7 +141,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Database access failed: ${e.message}", Toast.LENGTH_LONG).show()
+                toast( "Database access failed: ${e.message}")
                 transactToNextScreen(Constants.Activities.CREATE_PROFILE)
             }
     }

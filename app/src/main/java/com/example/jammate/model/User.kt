@@ -1,10 +1,8 @@
 package com.example.jammate.model
 
 data class User(
-    // flow flag (root)
     var profileCompleted: Boolean = false,
 
-    // flat user fields (root)
     var firstName: String = "",
     var lastName: String = "",
     var stageName: String = "",
@@ -19,9 +17,5 @@ data class User(
     var profilePhotoUrl: String = "",
     var createdAt: Long = 0L,
 
-    // raterUid -> rating
-    var ratingsByUser: Map<String, Double> = emptyMap(),
-
-    // postId list (for now)
     var posts: List<String> = emptyList()
 )

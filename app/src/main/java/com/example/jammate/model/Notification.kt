@@ -12,8 +12,6 @@ data class Notification(
     var postId: String = "",
     var postType: String = "",
     var timestamp: Long = 0L,
-    @get:PropertyName("isRead")
-    @set:PropertyName("isRead")
     var isRead: Boolean = false,
     var message: String = ""
 )

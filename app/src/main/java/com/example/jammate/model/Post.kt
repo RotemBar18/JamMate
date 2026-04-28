@@ -19,7 +19,6 @@ data class Post(
     var applicationsCount: Int = 0,
     var commentsCount: Int = 0,
 
-    // Band member
     var instrument: List<String> = emptyList(),
     var genre: List<String> = emptyList(),
     var skillLevel: String? = null

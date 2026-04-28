@@ -5,7 +5,7 @@ data class PostUi(
     val distanceKm: Double,
     val owner:User = User(),
     val ownerPhotoUrl: String = "",
-    // UI state (NOT stored in DB)
+
     val isLikedByMe: Boolean = false,
     val isAppliedByMe: Boolean = false,
     val isComingByMe: Boolean = false,

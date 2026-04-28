@@ -14,6 +14,8 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.jammate.App
+import com.example.jammate.App.Companion.toast
 import com.example.jammate.adapters.ProfileGridAdapter
 import com.example.jammate.data.PostManager
 import com.example.jammate.databinding.FragmentExploreBinding
@@ -42,7 +44,11 @@ class ExploreFragment : Fragment(), LocationCallback {
     private var canLoadMore = true
     private var lastPostTimestamp: Long? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentExploreBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -68,7 +74,8 @@ class ExploreFragment : Fragment(), LocationCallback {
         gridAdapter = ProfileGridAdapter(
             onClick = { ui ->
                 val list = gridAdapter.currentList
-                val startIndex = list.indexOfFirst { it.post.postId == ui.post.postId }.coerceAtLeast(0)
+                val startIndex =
+                    list.indexOfFirst { it.post.postId == ui.post.postId }.coerceAtLeast(0)
                 val ids = ArrayList(list.map { it.post.postId })
 
                 PostViewerActivity.startFeed(
@@ -84,7 +91,7 @@ class ExploreFragment : Fragment(), LocationCallback {
         binding.exploreRVPosts.layoutManager = layoutManager
         binding.exploreRVPosts.adapter = gridAdapter
 
-        // Add scroll listener for pagination
+        // scroll listener for pagination
         binding.exploreRVPosts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -92,7 +99,7 @@ class ExploreFragment : Fragment(), LocationCallback {
                 val totalItemCount = layoutManager.itemCount
                 val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
-                // Load more items if we are at the end of the list
+                // load more items if we are at the end of the list
                 if (!isLoading && canLoadMore && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
                     loadPosts(isInitialLoad = false)
                 }
@@ -174,7 +181,8 @@ class ExploreFragment : Fragment(), LocationCallback {
             lastPostTimestamp = posts.last().createdAt
 
             val myUid = postManager.getCurrentUid()
-            val visiblePosts = if (myUid.isNullOrBlank()) posts else posts.filter { it.ownerId != myUid }
+            val visiblePosts =
+                if (myUid.isNullOrBlank()) posts else posts.filter { it.ownerId != myUid }
 
             if (visiblePosts.isEmpty()) return@fetchPostsPaginated
 
@@ -192,11 +200,17 @@ class ExploreFragment : Fragment(), LocationCallback {
             val p = ui.post
             val postLocation = p.location
 
-            val distanceKm = if (loc?.lat != null && loc.lng != null && postLocation?.lat != null && postLocation.lng != null) {
-                GeoHelper.distanceKm(loc.lat!!, loc.lng!!, postLocation.lat!!, postLocation.lng!!)
-            } else {
-                MAX_DISTANCE_KM
-            }
+            val distanceKm =
+                if (loc?.lat != null && loc.lng != null && postLocation?.lat != null && postLocation.lng != null) {
+                    GeoHelper.distanceKm(
+                        loc.lat!!,
+                        loc.lng!!,
+                        postLocation.lat!!,
+                        postLocation.lng!!
+                    )
+                } else {
+                    MAX_DISTANCE_KM
+                }
             ui.copy(distanceKm = distanceKm)
         }
 
@@ -222,6 +236,4 @@ class ExploreFragment : Fragment(), LocationCallback {
         gridAdapter.submitList(filtered)
     }
 
-    private fun toast(msg: String) =
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
 }

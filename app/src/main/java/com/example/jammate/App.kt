@@ -3,6 +3,7 @@ package com.example.jammate
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -11,8 +12,10 @@ import com.example.jammate.utilities.ThemeManager
 import com.google.android.libraries.places.api.Places
 
 class App : Application() {
+
     override fun onCreate() {
         super.onCreate()
+        instance = this
         
         ImageLoader.init(this)
         ThemeManager.applyTheme(this)
@@ -43,5 +46,14 @@ class App : Application() {
         val controller = WindowInsetsControllerCompat(window, window.decorView)
         controller.hide(WindowInsetsCompat.Type.systemBars())
         controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    }
+
+
+    companion object {
+        private lateinit var instance: App
+
+        fun toast(msg: String) {
+            Toast.makeText(instance, msg, Toast.LENGTH_SHORT).show()
+        }
     }
 }

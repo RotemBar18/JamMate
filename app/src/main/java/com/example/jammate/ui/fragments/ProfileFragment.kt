@@ -26,6 +26,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.jammate.App
+import com.example.jammate.App.Companion.toast
 import com.example.jammate.adapters.ProfileGridAdapter
 import com.example.jammate.data.PostManager
 import com.example.jammate.data.UserManager
@@ -67,7 +69,11 @@ class ProfileFragment : Fragment() {
         userId = arguments?.getString(ARG_USER_ID)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -85,7 +91,7 @@ class ProfileFragment : Fragment() {
     private fun initViews() {
         initTabs()
         initRecycler()
-        
+
         val isOwnProfile = userId == null || userId == auth.currentUser?.uid
 
         mediaPicker = MediaPicker(this) { uri, type ->
@@ -170,9 +176,14 @@ class ProfileFragment : Fragment() {
                 val instruments = readStringList(snap.child("instruments"))
                 val genres = readStringList(snap.child("genres"))
 
-                val dbPhotoUrl = snap.child("profilePhotoUrl").getValue(String::class.java).orEmpty()
+                val dbPhotoUrl =
+                    snap.child("profilePhotoUrl").getValue(String::class.java).orEmpty()
                 if (dbPhotoUrl.isNotBlank()) {
-                    ImageLoader.getInstance().loadImage(dbPhotoUrl.toUri(), binding.profileIMGAvatar, R.drawable.ic_profile)
+                    ImageLoader.getInstance().loadImage(
+                        dbPhotoUrl.toUri(),
+                        binding.profileIMGAvatar,
+                        R.drawable.ic_profile
+                    )
                 } else {
                     binding.profileIMGAvatar.setImageResource(R.drawable.ic_profile)
                 }
@@ -240,7 +251,8 @@ class ProfileFragment : Fragment() {
                     toast(err2 ?: "Failed saving url")
                     return@saveProfilePhotoUrlToUser
                 }
-                ImageLoader.getInstance().loadImage(url.toUri(), binding.profileIMGAvatar, R.drawable.ic_profile)
+                ImageLoader.getInstance()
+                    .loadImage(url.toUri(), binding.profileIMGAvatar, R.drawable.ic_profile)
                 toast("Photo updated")
             }
         }
@@ -299,7 +311,7 @@ class ProfileFragment : Fragment() {
         val list = gridAdapter.currentList
         binding.profileLBLPostsCount.text = list.size.toString()
         binding.profileLBLLikesCount.text = list.sumOf { it.post.likesCount }.toString()
-        
+
         UserManager.instance.fetchFollowersCount(uid) { count ->
             binding.profileLBLFollowersCount.text = count.toString()
         }
@@ -329,13 +341,23 @@ class ProfileFragment : Fragment() {
     private fun updateFollowButton(isFollowing: Boolean) {
         binding.profileBTNFollow.text = if (isFollowing) "Following" else "Follow"
         if (isFollowing) {
-            binding.profileBTNFollow.setBackgroundColor(resources.getColor(R.color.app_surface, null))
+            binding.profileBTNFollow.setBackgroundColor(
+                resources.getColor(
+                    R.color.app_surface,
+                    null
+                )
+            )
             binding.profileBTNFollow.setTextColor(resources.getColor(R.color.app_text_main, null))
             binding.profileBTNFollow.strokeWidth = (1 * resources.displayMetrics.density).toInt()
             binding.profileBTNFollow.setStrokeColorResource(R.color.app_outline)
         } else {
             binding.profileBTNFollow.icon = null
-            binding.profileBTNFollow.setBackgroundColor(resources.getColor(R.color.app_accent, null))
+            binding.profileBTNFollow.setBackgroundColor(
+                resources.getColor(
+                    R.color.app_accent,
+                    null
+                )
+            )
             binding.profileBTNFollow.setTextColor(resources.getColor(R.color.white, null))
             binding.profileBTNFollow.strokeWidth = 0
         }
@@ -396,9 +418,10 @@ class ProfileFragment : Fragment() {
         menuBinding.profileOptionsBTNToggle.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (!isChecked) return@addOnButtonCheckedListener
 
-            val newMode = if (checkedId == R.id.profileOptions_BTN_darkTheme) AppCompatDelegate.MODE_NIGHT_YES
-                          else AppCompatDelegate.MODE_NIGHT_NO
-            
+            val newMode =
+                if (checkedId == R.id.profileOptions_BTN_darkTheme) AppCompatDelegate.MODE_NIGHT_YES
+                else AppCompatDelegate.MODE_NIGHT_NO
+
             ThemeManager.saveTheme(requireContext(), newMode)
         }
 
@@ -417,7 +440,4 @@ class ProfileFragment : Fragment() {
         }
         startActivity(intent)
     }
-
-    private fun toast(msg: String) =
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
 }

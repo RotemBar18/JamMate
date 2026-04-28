@@ -16,9 +16,9 @@ object Constants {
     }
 
     object PostTypes {
-        const val JAM_SESSION = "jam"
-        const val NORMAL_POST = "normal"
-        const val BAND_MEMBER = "band_member"
+        const val JAM_SESSION = "JAM"
+        const val NORMAL_POST = "NORMAL"
+        const val BAND_MEMBER = "BAND_MEMBER"
     }
 
     object Lists {

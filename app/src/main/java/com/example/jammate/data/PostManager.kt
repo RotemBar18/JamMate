@@ -15,7 +15,7 @@ import com.google.firebase.database.Transaction
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 
-// This class manages all post-related operations, including creation, deletion, and real-time updates.
+// This class manages all post related operations, including creation, deletion, and real time updates
 class PostManager private constructor() {
 
     private val auth = FirebaseAuth.getInstance()
@@ -27,10 +27,8 @@ class PostManager private constructor() {
         val instance: PostManager by lazy { PostManager() }
     }
 
-    // Retrieves the unique ID of the currently logged-in user.
     fun getCurrentUid(): String? = auth.currentUser?.uid
 
-    // Validates and saves a new post to the database under multiple organizational nodes.
     fun createPost(post: Post, onResult: (Boolean, String?, String?) -> Unit) {
         val error = validatePost(post)
         if (error != null) return onResult(false, null, error)
@@ -55,7 +53,6 @@ class PostManager private constructor() {
         }.addOnFailureListener { e -> onResult(false, null, e.message) }
     }
 
-    // Removes a post and all its associated data like likes and comments from the database.
     fun deletePost(post: Post, onResult: (Boolean, String?) -> Unit) {
         val uid = getCurrentUid() ?: return onResult(false, "No user")
         if (post.ownerId != uid) return onResult(false, "Permission denied")
@@ -76,7 +73,7 @@ class PostManager private constructor() {
         }.addOnFailureListener { e -> onResult(false, e.message) }
     }
 
-    // Checks if the post has all required fields based on its specific type.
+    // check if the post has all required fields based on its specific type
     private fun validatePost(post: Post): String? {
         if (post.description.isBlank()) return "Description is required"
         if (post.type == Constants.PostTypes.JAM_SESSION && post.location == null) return "Location required for Jam"
@@ -88,7 +85,7 @@ class PostManager private constructor() {
         return null
     }
 
-    // Transfers post media to storage and returns the resulting download URL.
+    // transfer post media to storage and returns the resulting download URL.
     fun uploadPostMedia(postId: String?, uri: Uri, mediaType: String, onResult: (Boolean, String?, String?) -> Unit) {
         val uid = getCurrentUid() ?: return onResult(false, null, "Not logged in")
         val ext = if (mediaType == "video") "mp4" else "jpg"
@@ -101,13 +98,13 @@ class PostManager private constructor() {
         }.addOnFailureListener { e -> onResult(false, null, e.message) }
     }
 
-    // Updates a specific post record with the permanent link to its media file.
+    // update a specific post record with the permanent link to its media file.
     fun attachMediaToPost(postId: String, url: String, type: String, onResult: (Boolean, String?) -> Unit) {
         val updates = mapOf("/posts/$postId/mediaUrl" to url, "/posts/$postId/mediaType" to type)
         db.updateChildren(updates).addOnSuccessListener { onResult(true, null) }.addOnFailureListener { e -> onResult(false, e.message) }
     }
 
-    // Toggles social actions like likes or applications and updates the corresponding counters.
+    // toggle social actions like likes and updates the counters.
     fun togglePostAction(postId: String, tag: String, onResult: (Boolean, String?, Boolean) -> Unit) {
         val uid = getCurrentUid() ?: return onResult(false, "No user", false)
 
@@ -161,7 +158,7 @@ class PostManager private constructor() {
         }
     }
 
-    // Adds a new comment to a post and increments the total comment count.
+    // add a new comment to a post and update comment count.
     fun addComment(postId: String, text: String, user: User, onResult: (Boolean, String?) -> Unit) {
         val uid = getCurrentUid() ?: return onResult(false, "No user")
         val commentId = db.child("postComments").child(postId).push().key ?: return onResult(false, "ID failure")
@@ -190,7 +187,7 @@ class PostManager private constructor() {
         }.addOnFailureListener { e -> onResult(false, e.message) }
     }
 
-    // Starts listening for real-time changes to the comments list of a specific post.
+    // listening for real time changes to the comments list of a post.
     fun observeComments(postId: String, onUpdate: (List<Comment>) -> Unit): ValueEventListener {
         val listener = object : ValueEventListener {
             override fun onDataChange(s: DataSnapshot) {
@@ -202,12 +199,12 @@ class PostManager private constructor() {
         return listener
     }
 
-    // Stops an active real-time listener for a post's comments.
+    // stop an active real time listener for a post comments.
     fun stopObservingComments(postId: String, listener: ValueEventListener) {
         db.child("postComments").child(postId).removeEventListener(listener)
     }
 
-    // Atomically increments or decrements a numerical counter in the database.
+    // increment or decrement a numerical counter in the database.
     private fun updateCounter(ref: com.google.firebase.database.DatabaseReference, delta: Int, onResult: (Boolean, String?) -> Unit) {
         ref.runTransaction(object : Transaction.Handler {
             override fun doTransaction(data: com.google.firebase.database.MutableData): Transaction.Result {
@@ -221,19 +218,12 @@ class PostManager private constructor() {
         })
     }
 
-    // Retrieves all available posts from the main post repository.
-    fun fetchAllPosts(onResult: (Boolean, List<Post>, String?) -> Unit) {
-        db.child("posts").get().addOnSuccessListener { snap ->
-            onResult(true, snap.children.mapNotNull { it.getValue(Post::class.java)?.apply { postId = it.key ?: "" } }, null)
-        }.addOnFailureListener { e -> onResult(false, emptyList(), e.message) }
-    }
-
     // Fetches posts with pagination, ordered by creation time.
     fun fetchPostsPaginated(pageSize: Int, startAfter: Long?, onResult: (Boolean, List<Post>, String?) -> Unit) {
         var query = db.child("posts").orderByChild("createdAt")
 
-        // If startAfter is provided, we fetch posts created at or before that timestamp.
-        // We subtract 1 from startAfter to avoid fetching the same last post again.
+        // if startAfter is provided, we fetch posts created at or before that timestamp
+        // we subtract 1 from startAfter to avoid fetching the same last post again
         if (startAfter != null) {
             query = query.endAt((startAfter - 1).toDouble())
         }
@@ -244,7 +234,7 @@ class PostManager private constructor() {
         }.addOnFailureListener { e -> onResult(false, emptyList(), e.message) }
     }
 
-    // Identifies which posts in a provided list have been liked by the current user.
+    // identify which posts in a provided list have been liked by the current user
     fun fetchLikedPostIds(ids: List<String>, onResult: (Set<String>) -> Unit) {
         val uid = getCurrentUid() ?: return onResult(emptySet())
         val liked = mutableSetOf<String>()
@@ -259,14 +249,14 @@ class PostManager private constructor() {
         }
     }
 
-    // Finds the IDs of all posts where the current user has performed a specific action.
+    // find the IDs of all posts where the current user has performed a specific action
     fun fetchMyPostIds(root: String, uid: String, onDone: (Set<String>) -> Unit) {
         db.child(root).get().addOnSuccessListener { snap ->
             onDone(snap.children.filter { it.hasChild(uid) }.mapNotNull { it.key }.toSet())
         }.addOnFailureListener { onDone(emptySet()) }
     }
 
-    // Retrieves all posts owned by a specific user and wraps them for UI display.
+    // retrieve all posts owned by a specific user and wraps them for UI display
     fun fetchUserPostUis(ownerId: String, owner: User, onDone: (Boolean, List<PostUi>, String?) -> Unit) {
         db.child("userPosts").child(ownerId).get().addOnSuccessListener { snap ->
             val ids = snap.children.mapNotNull { it.key }
@@ -275,17 +265,15 @@ class PostManager private constructor() {
             val posts = mutableListOf<Post>()
             var remaining = ids.size
             ids.forEach { pid ->
-                db.child("posts").child(pid).get().addOnSuccessListener { pSnap ->
-                    pSnap.getValue(Post::class.java)?.let { posts.add(it.apply { postId = pSnap.key ?: pid }) }
+                db.child("posts").child(pid).get().addOnSuccessListener { postSnap ->
+                    postSnap.getValue(Post::class.java)?.let { posts.add(it.apply { postId = postSnap.key ?: pid }) }
                     if (--remaining == 0) onDone(true, posts.sortedByDescending { it.createdAt }.map { PostUi(it, 0.0, owner, owner.profilePhotoUrl) }, null)
                 }.addOnFailureListener { if (--remaining == 0) onDone(true, posts.map { PostUi(it, 0.0, owner, owner.profilePhotoUrl) }, null) }
             }
         }.addOnFailureListener { e -> onDone(false, emptyList(), e.message) }
     }
 
-
-   // prepare a list of PostUi objects with full user and status data.
-
+    // prepare a list of PostUi objects with full user and status data
     fun prepareViewerData(posts: List<Post>, onDone: (List<PostUi>) -> Unit) {
         val uid = getCurrentUid() ?: ""
         val ownerIds = posts.map { it.ownerId }.distinct()
@@ -301,7 +289,7 @@ class PostManager private constructor() {
                 fetchMyPostIds("jamArrivals", uid) { arrivalIds ->
                     fetchMyPostIds("memberApplications", uid) { applyIds ->
                         UserManager.instance.fetchFollowStatus(ownerIds, uid) { followedOwnerIds ->
-                            val finalized = initialUiList.map { ui ->
+                            val infoMap = initialUiList.map { ui ->
                                 ui.copy(
                                     isLikedByMe = likedIds.contains(ui.post.postId),
                                     isComingByMe = arrivalIds.contains(ui.post.postId),
@@ -309,7 +297,7 @@ class PostManager private constructor() {
                                     isFollowingOwner = followedOwnerIds.contains(ui.post.ownerId)
                                 )
                             }
-                            onDone(finalized)
+                            onDone(infoMap)
                         }
                     }
                 }
@@ -318,8 +306,7 @@ class PostManager private constructor() {
     }
 
 
-     //Fetches post objects for a list of IDs.
-
+    // fetch post objects for a list of IDs
     fun fetchPostsByIds(postIds: List<String>, onDone: (List<Post>) -> Unit) {
         val posts = mutableListOf<Post>()
         var remaining = postIds.size

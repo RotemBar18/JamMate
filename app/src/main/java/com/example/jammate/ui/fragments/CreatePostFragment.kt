@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.jammate.App.Companion.toast
 import com.example.jammate.databinding.FragmentCreatePostBinding
 import com.example.jammate.databinding.ModalPostTypePickerBinding
 import com.example.jammate.model.LocationData
@@ -208,8 +209,6 @@ class CreatePostFragment : Fragment() {
             }
         }
     }
-
-    private fun toast(msg: String) = Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
 
     override fun onDestroyView() {
         super.onDestroyView()

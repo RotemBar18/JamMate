@@ -6,7 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
-// This class handles user-related data operations, such as profile management and social interactions.
+// This class handles user related data operations, such as profile management and social interactions.
 class UserManager(
     private val db: DatabaseReference = FirebaseDatabase.getInstance().reference
 ) {
@@ -15,7 +15,7 @@ class UserManager(
         val instance: UserManager by lazy { UserManager() }
     }
 
-    // Marks a user profile as complete and saves the user details to the database.
+    // mark a user profile as complete and saves the user details to the database
     fun saveCompletedProfile(uid: String, user: User, onResult: (Boolean, String?) -> Unit) {
         user.profileCompleted = true
         db.child("users").child(uid)
@@ -24,7 +24,6 @@ class UserManager(
             .addOnFailureListener { e -> onResult(false, e.message) }
     }
 
-    // Retrieves user information from the database using their unique ID.
     fun fetchUser(uid: String, onResult: (Boolean, User?, String?) -> Unit) {
         db.child("users").child(uid).get()
             .addOnSuccessListener { snap ->
@@ -36,7 +35,6 @@ class UserManager(
             }
     }
 
-    // Toggles the follow status between the current user and a target user in the database.
     fun toggleFollow(targetUid: String, onResult: (Boolean, String?, Boolean) -> Unit) {
         val currentUid = FirebaseAuth.getInstance().currentUser?.uid ?: return onResult(false, "User not logged in", false)
         if (currentUid == targetUid) return onResult(false, "You cannot follow yourself", false)
@@ -72,14 +70,12 @@ class UserManager(
         }
     }
 
-    // Counts the total number of followers for a specific user.
     fun fetchFollowersCount(uid: String, onResult: (Int) -> Unit) {
         db.child("userFollowers").child(uid).get()
             .addOnSuccessListener { onResult(it.childrenCount.toInt()) }
             .addOnFailureListener { onResult(0) }
     }
 
-    // Fetches multiple user records from the database in a batch-like manner.
     fun fetchMultipleUsers(uids: List<String>, onResult: (Map<String, User>) -> Unit) {
         if (uids.isEmpty()) return onResult(emptyMap())
         val result = mutableMapOf<String, User>()
@@ -92,7 +88,6 @@ class UserManager(
         }
     }
 
-    // Determines the following status for a list of users relative to the current user.
     fun fetchFollowStatus(targetUids: List<String>, currentUid: String, onDone: (Set<String>) -> Unit) {
         if (targetUids.isEmpty()) return onDone(emptySet())
         val followed = mutableSetOf<String>()

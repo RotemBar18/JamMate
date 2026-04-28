@@ -4,11 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.viewpager2.widget.ViewPager2
+import com.example.jammate.App.Companion.toast
 import com.example.jammate.data.PostManager
 import com.example.jammate.data.UserManager
 import com.example.jammate.model.Post
@@ -40,7 +39,6 @@ class PostViewerActivity : AppCompatActivity() {
     private var player: ExoPlayer? = null
     private var currentPos = 0
 
-    // Handles page changes to manage video playback and tracking.
     private val pageCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             currentPos = position
@@ -79,7 +77,6 @@ class PostViewerActivity : AppCompatActivity() {
         handleIntent()
     }
 
-    // Configures the pager adapter with all required interaction callbacks.
     private fun setupAdapter() {
         adapter = PostViewerPagerAdapter(
             onBack = { finish() },
@@ -99,7 +96,6 @@ class PostViewerActivity : AppCompatActivity() {
         )
     }
 
-    // Opens the comments bottom sheet for a specific post.
     private fun showComments(post: Post) {
         CommentsBottomSheetFragment.newInstance(post.postId) { newCount ->
             val current = adapter.currentList.toMutableList()
@@ -111,19 +107,17 @@ class PostViewerActivity : AppCompatActivity() {
         }.show(supportFragmentManager, "comments")
     }
 
-    // Toggles the follow status for a user and updates the UI accordingly.
     private fun toggleFollow(uid: String) {
         UserManager.instance.toggleFollow(uid) { ok, err, isFollowing ->
             if (ok) {
                 toast(if (isFollowing) "Following" else "Unfollowed")
                 updateFollowStateInList(uid, isFollowing)
             } else {
-                toast(err ?: "Follow failed")
+               toast(err ?: "Follow failed")
             }
         }
     }
 
-    // Shows the options menu for deleting a post.
     private fun showDeleteBottomSheet(post: Post) {
         val dialog = BottomSheetDialog(this)
         val modalBinding = ModalDeletePostBinding.inflate(layoutInflater)
@@ -138,7 +132,6 @@ class PostViewerActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    // Displays a confirmation dialog before permanently removing a post.
     private fun showDeleteConfirmation(post: Post) {
         val dialog = BottomSheetDialog(this)
         val modalBinding = ModalDeleteConfirmationBinding.inflate(layoutInflater)
@@ -153,11 +146,10 @@ class PostViewerActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    // Removes the post from the database and closes the viewer.
     private fun executeDeletion(post: Post) {
         PostManager.instance.deletePost(post) { ok, err ->
             if (ok) {
-                toast("Post deleted")
+               toast("Post deleted")
                 finish() 
             } else {
                 toast(err ?: "Error deleting post")
@@ -165,7 +157,6 @@ class PostViewerActivity : AppCompatActivity() {
         }
     }
 
-    // Updates the follow status locally in the adapter list.
     private fun updateFollowStateInList(ownerId: String, isFollowing: Boolean) {
         val current = adapter.currentList.map { 
             if (it.post.ownerId == ownerId) it.copy(isFollowingOwner = isFollowing) else it 
@@ -173,7 +164,6 @@ class PostViewerActivity : AppCompatActivity() {
         adapter.submitList(current)
     }
 
-    // Parses intent data to determine which posts to load.
     private fun handleIntent() {
         when (mode) {
             MODE_FEED -> {
@@ -191,7 +181,6 @@ class PostViewerActivity : AppCompatActivity() {
         }
     }
 
-    // Loads posts for a specific owner and prepares them for the viewer.
     private fun loadOwnerPosts(ownerId: String, startId: String) {
         PostManager.instance.fetchUserPostUis(ownerId, User()) { ok, list, err ->
             if (ok) {
@@ -204,7 +193,6 @@ class PostViewerActivity : AppCompatActivity() {
         }
     }
 
-    // Loads a list of specific post IDs for the feed mode.
     private fun loadFeed(ids: List<String>, startIdx: Int) {
         PostManager.instance.fetchPostsByIds(ids) { posts ->
             PostManager.instance.prepareViewerData(posts) { finalized ->
@@ -213,7 +201,6 @@ class PostViewerActivity : AppCompatActivity() {
         }
     }
 
-    // Submits the prepared data to the adapter and sets the starting page.
     private fun displayFinalizedData(finalized: List<PostUi>, startId: String?, startIdx: Int) {
         adapter.submitList(finalized)
         val index = if (startId != null) finalized.indexOfFirst { it.post.postId == startId }.coerceAtLeast(0) 
@@ -226,7 +213,6 @@ class PostViewerActivity : AppCompatActivity() {
         }
     }
 
-    // Handles social actions like Likes and Registrations via the manager.
     private fun toggleAction(post: Post, action: String) {
         val postId = post.postId.orEmpty()
         if (postId.isBlank()) return
@@ -271,7 +257,6 @@ class PostViewerActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private fun toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 
     companion object {
         private const val EXTRA_MODE = "extra_mode"
