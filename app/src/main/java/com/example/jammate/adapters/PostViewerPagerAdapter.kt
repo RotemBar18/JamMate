@@ -26,7 +26,6 @@ import com.example.jammate.utilities.ImageLoader
 import com.google.android.material.button.MaterialButton
 import androidx.core.net.toUri
 
-// adapter for the fullscreen post viewer
 class PostViewerPagerAdapter(
     private val onBack: () -> Unit,
     private val onLike: (Post) -> Unit = {},
@@ -116,7 +115,6 @@ class PostViewerPagerAdapter(
         binding.postViewerIMGMedia.isVisible = true
     }
 
-    // user info, profile clicks, and follow button logic
     private fun bindHeader(binding: ItemPostViewerPageBinding, item: PostUi) {
         binding.postViewerBTNBack.setOnClickListener { onBack() }
         binding.postViewerLBLUserName.text = item.owner.stageName.ifBlank { "${item.owner.firstName} ${item.owner.lastName}" }
@@ -173,7 +171,6 @@ class PostViewerPagerAdapter(
             binding.postViewerSCROLLTags.isGone = true
         }
 
-        // set the caption and handles the expand toggle.
         binding.postViewerLBLDescription.text = post.description
         binding.postViewerLBLDescription.maxLines = if (holder.isExpanded) 100 else 2
         binding.postViewerLBLDescription.setOnClickListener {
@@ -208,7 +205,6 @@ class PostViewerPagerAdapter(
         binding.postViewerBTNLike.setColorFilter(color)
     }
 
-    // manage text and color for primary actions like register or apply
     private fun updateActionStatus(binding: ItemPostViewerPageBinding, item: PostUi, hasMedia: Boolean) {
         val kind = item.post.kind()
         if (kind == PostKind.NORMAL) {
@@ -230,12 +226,10 @@ class PostViewerPagerAdapter(
         binding.postViewerLBLPrimaryAction.setTextColor(color)
     }
 
-    // stop the loading animation
     private fun hideLoader(binding: ItemPostViewerPageBinding) {
         binding.postViewerLOTLoading.apply { cancelAnimation(); isGone = true }
     }
 
-    // prepares and plays video content for the currently selected page
     fun playAt(pager: ViewPager2, position: Int, player: ExoPlayer) {
         pager.post {
             if (position !in 0 until itemCount) return@post
@@ -255,7 +249,6 @@ class PostViewerPagerAdapter(
         }
     }
 
-    // stop video playback and detach the player
     fun stopAt(position: Int, player: ExoPlayer) {
         val binding = getBindingAt(position) ?: return
         hideLoader(binding)
@@ -264,18 +257,23 @@ class PostViewerPagerAdapter(
         binding.postViewerIMGMedia.isVisible = true
     }
 
-    // retrieve the view binding for a specific adapter position
     private fun getBindingAt(position: Int): ItemPostViewerPageBinding? {
         val rv = currentPager?.getChildAt(0) as? RecyclerView ?: return null
         return (rv.findViewHolderForAdapterPosition(position) as? PostViewHolder)?.binding
     }
 
-    // returns the binding for the page currently visible to the user
     private fun visibleBindingOrNull() = getBindingAt(currentPosition)
 
-    // update the list by specific item differences
-    private class PostDiffCallback : DiffUtil.ItemCallback<PostUi>() {
+    fun releasePlayerListener(player: ExoPlayer) {
+        if (playerListenerAttached) {
+            player.removeListener(playerListener)
+            playerListenerAttached = false
+        }
+        currentPager = null
+        currentPosition = -1
+    }
 
+    private class PostDiffCallback : DiffUtil.ItemCallback<PostUi>() {
         override fun areItemsTheSame(old: PostUi, new: PostUi): Boolean {
             return old.post.postId == new.post.postId
         }

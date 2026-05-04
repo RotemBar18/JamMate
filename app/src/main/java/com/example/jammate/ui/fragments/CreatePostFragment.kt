@@ -25,8 +25,7 @@ import java.util.Calendar
 
 class CreatePostFragment : Fragment() {
 
-    private var _binding: FragmentCreatePostBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentCreatePostBinding
 
     private var currentType = Constants.PostTypes.NORMAL_POST
     private var selectedLocation: LocationData? = null
@@ -39,9 +38,10 @@ class CreatePostFragment : Fragment() {
     private var pickedType: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentCreatePostBinding.inflate(inflater, container, false)
+        binding = FragmentCreatePostBinding.inflate(inflater, container, false)
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -201,8 +201,5 @@ class CreatePostFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+
 }

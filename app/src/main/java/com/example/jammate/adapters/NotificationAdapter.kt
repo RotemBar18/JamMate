@@ -41,9 +41,7 @@ class NotificationAdapter(
                 else -> R.drawable.ic_notification
             }
             binding.notificationIMGType.setImageResource(typeIcon)
-            
-            binding.root.alpha = if (notification.isRead) 0.6f else 1.0f
-            
+
             binding.root.setOnClickListener { onNotificationClick(notification) }
             binding.notificationBTNDelete.setOnClickListener { onDeleteClick(notification) }
         }

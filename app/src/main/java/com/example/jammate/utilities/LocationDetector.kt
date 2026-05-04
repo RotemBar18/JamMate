@@ -14,7 +14,7 @@ class LocationDetector(
 
     private val fused = LocationServices.getFusedLocationProviderClient(activity)
 
-    @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     fun fetchLastLocation() {
         fused.lastLocation
             .addOnSuccessListener { loc ->

@@ -15,53 +15,49 @@ class NotificationManager private constructor() {
     }
 
     fun sendNotification(notification: Notification) {
-        if (notification.senderId == notification.receiverId) return // Don't notify yourself
+        if (notification.senderId == notification.receiverId) return
 
-        val id = db.child("notifications").child(notification.receiverId).push().key ?: return
-        notification.notificationId = id
+        val notificationId = db.child("notifications").child(notification.receiverId).push().key ?: return
+        notification.notificationId = notificationId
         notification.timestamp = System.currentTimeMillis()
 
-        db.child("notifications").child(notification.receiverId).child(id).setValue(notification)
+        db.child("notifications").child(notification.receiverId).child(notificationId).setValue(notification)
     }
 
-    fun observeNotifications(uid: String, onUpdate: (List<Notification>) -> Unit): ValueEventListener {
+    fun observeAndGetNotifications(userId: String, onUpdate: (List<Notification>) -> Unit): ValueEventListener {
         val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val list = snapshot.children.mapNotNull { it.getValue(Notification::class.java) }
+                val notifications = snapshot.children.mapNotNull { it.getValue(Notification::class.java) }
                     .sortedByDescending { it.timestamp }
-                onUpdate(list)
+                onUpdate(notifications)
             }
 
             override fun onCancelled(error: DatabaseError) {}
         }
-        db.child("notifications").child(uid).addValueEventListener(listener)
+        db.child("notifications").child(userId).addValueEventListener(listener)
         return listener
     }
 
-    fun stopObserving(uid: String, listener: ValueEventListener) {
-        db.child("notifications").child(uid).removeEventListener(listener)
-    }
-
-    fun markAsRead(uid: String, notificationId: String) {
-        db.child("notifications").child(uid).child(notificationId).child("isRead").setValue(true)
-    }
-
-    fun markAllAsRead(uid: String) {
-        db.child("notifications").child(uid).get().addOnSuccessListener { snapshot ->
+    fun markAllAsRead(userId: String) {
+        db.child("notifications").child(userId).get().addOnSuccessListener { snapshot ->
             val updates = hashMapOf<String, Any>()
-            snapshot.children.forEach { child ->
-                val notification = child.getValue(Notification::class.java)
-                if (notification?.isRead == false) {
-                    updates["${child.key}/isRead"] = true
+            snapshot.children.forEach { childSnapshot ->
+                val notification = childSnapshot.getValue(Notification::class.java)
+                if (notification?.readStatus == false) {
+                    updates["${childSnapshot.key}/readStatus"] = true
                 }
             }
             if (updates.isNotEmpty()) {
-                db.child("notifications").child(uid).updateChildren(updates)
+                db.child("notifications").child(userId).updateChildren(updates)
             }
         }
     }
 
-    fun deleteNotification(uid: String, notificationId: String) {
-        db.child("notifications").child(uid).child(notificationId).removeValue()
+    fun deleteNotification(userId: String, notificationId: String) {
+        db.child("notifications").child(userId).child(notificationId).removeValue()
+    }
+
+    fun removeNotificationListener(userId: String, listener: ValueEventListener) {
+        db.child("notifications").child(userId).removeEventListener(listener)
     }
 }

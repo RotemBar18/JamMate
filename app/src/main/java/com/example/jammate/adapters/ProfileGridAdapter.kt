@@ -11,7 +11,6 @@ import com.example.jammate.model.PostUi
 import com.example.jammate.utilities.ImageLoader
 import androidx.core.net.toUri
 
-// This adapter handles the grid display of posts on the profile page.
 class ProfileGridAdapter(
     private val onClick: (PostUi) -> Unit
 ) : ListAdapter<PostUi, ProfileGridAdapter.ProfileGridViewHolder>(PostDiffCallback()) {

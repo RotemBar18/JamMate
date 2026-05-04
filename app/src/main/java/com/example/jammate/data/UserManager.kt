@@ -6,7 +6,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
-// This class handles user related data operations, such as profile management and social interactions.
 class UserManager(
     private val db: DatabaseReference = FirebaseDatabase.getInstance().reference
 ) {
@@ -15,89 +14,95 @@ class UserManager(
         val instance: UserManager by lazy { UserManager() }
     }
 
-    // mark a user profile as complete and saves the user details to the database
-    fun saveCompletedProfile(uid: String, user: User, onResult: (Boolean, String?) -> Unit) {
+    fun saveCompletedProfile(userId: String, user: User, onResult: (Boolean, String?) -> Unit) {
         user.profileCompleted = true
-        db.child("users").child(uid)
+        db.child("users").child(userId)
             .setValue(user)
             .addOnSuccessListener { onResult(true, null) }
             .addOnFailureListener { e -> onResult(false, e.message) }
     }
 
-    fun fetchUser(uid: String, onResult: (Boolean, User?, String?) -> Unit) {
-        db.child("users").child(uid).get()
-            .addOnSuccessListener { snap ->
-                val u = snap.getValue(User::class.java)
-                onResult(u != null, u, if (u == null) "User not found" else null)
+    fun fetchUser(userId: String, onResult: (Boolean, User?, String?) -> Unit) {
+        db.child("users").child(userId).get()
+            .addOnSuccessListener { snapshot ->
+                val user = snapshot.getValue(User::class.java)
+                onResult(user != null, user, if (user == null) "Profile not found" else null)
             }
             .addOnFailureListener { e ->
                 onResult(false, null, e.message)
             }
     }
 
-    fun toggleFollow(targetUid: String, onResult: (Boolean, String?, Boolean) -> Unit) {
-        val currentUid = FirebaseAuth.getInstance().currentUser?.uid ?: return onResult(false, "User not logged in", false)
-        if (currentUid == targetUid) return onResult(false, "You cannot follow yourself", false)
+    fun toggleFollow(userId: String, onResult: (Boolean, String?, Boolean) -> Unit) {
+        val myUserId = FirebaseAuth.getInstance().currentUser?.uid ?: return onResult(false, "You need to be logged in", false)
+        if (myUserId == userId) return onResult(false, "You can't follow yourself", false)
 
-        val followingRef = db.child("userFollowing").child(currentUid).child(targetUid)
-        followingRef.get().addOnSuccessListener { snap ->
-            val shouldFollow = !snap.exists()
+        val followRef = db.child("userFollowing").child(myUserId).child(userId)
+        
+        followRef.get().addOnSuccessListener { snapshot ->
+            val isNowFollowing = !snapshot.exists()
 
             val updates = hashMapOf<String, Any?>(
-                "/userFollowing/$currentUid/$targetUid" to if (shouldFollow) true else null,
-                "/userFollowers/$targetUid/$currentUid" to if (shouldFollow) true else null
+                "/userFollowing/$myUserId/$userId" to if (isNowFollowing) true else null,
+                "/userFollowers/$userId/$myUserId" to if (isNowFollowing) true else null
             )
 
             db.updateChildren(updates).addOnSuccessListener {
-                if (shouldFollow) {
-                    fetchUser(currentUid) { ok, user, _ ->
-                        if (ok && user != null) {
-                            NotificationManager.instance.sendNotification(
-                                Notification(
-                                    type = "follow",
-                                    senderId = currentUid,
-                                    senderName = user.stageName.ifBlank { "${user.firstName} ${user.lastName}" },
-                                    senderPhotoUrl = user.profilePhotoUrl,
-                                    receiverId = targetUid,
-                                    message = "started following you"
-                                )
-                            )
-                        }
-                    }
-                }
-                onResult(true, null, shouldFollow) 
-            }.addOnFailureListener { e -> onResult(false, e.message, !shouldFollow) }
-        }
+                if (isNowFollowing) sendFollowNotification(myUserId, userId)
+                onResult(true, null, isNowFollowing) 
+            }.addOnFailureListener { e -> onResult(false, e.message, !isNowFollowing) }
+        }.addOnFailureListener { e -> onResult(false, e.message, false) }
     }
 
-    fun fetchFollowersCount(uid: String, onResult: (Int) -> Unit) {
-        db.child("userFollowers").child(uid).get()
-            .addOnSuccessListener { onResult(it.childrenCount.toInt()) }
-            .addOnFailureListener { onResult(0) }
-    }
-
-    fun fetchMultipleUsers(uids: List<String>, onResult: (Map<String, User>) -> Unit) {
-        if (uids.isEmpty()) return onResult(emptyMap())
-        val result = mutableMapOf<String, User>()
-        var remaining = uids.size
-        uids.forEach { uid ->
-            fetchUser(uid) { ok, user, _ ->
-                if (ok && user != null) result[uid] = user
-                if (--remaining == 0) onResult(result)
+    private fun sendFollowNotification(senderId: String, receiverId: String) {
+        fetchUser(senderId) { success, user, _ ->
+            if (success && user != null) {
+                NotificationManager.instance.sendNotification(
+                    Notification(
+                        type = "follow",
+                        senderId = senderId,
+                        senderName = user.stageName.ifBlank { "${user.firstName} ${user.lastName}" },
+                        senderPhotoUrl = user.profilePhotoUrl,
+                        receiverId = receiverId,
+                        message = "started following you"
+                    )
+                )
             }
         }
     }
 
-    fun fetchFollowStatus(targetUids: List<String>, currentUid: String, onDone: (Set<String>) -> Unit) {
-        if (targetUids.isEmpty()) return onDone(emptySet())
+    fun fetchFollowersCount(userId: String, onResult: (Int) -> Unit) {
+        db.child("userFollowers").child(userId).get()
+            .addOnSuccessListener { onResult(it.childrenCount.toInt()) }
+            .addOnFailureListener { onResult(0) }
+    }
+
+    fun fetchMultipleUsers(userIds: List<String>, onResult: (Map<String, User>) -> Unit) {
+        if (userIds.isEmpty()) return onResult(emptyMap())
+        
+        val result = mutableMapOf<String, User>()
+        var pending = userIds.size
+        
+        userIds.forEach { userId ->
+            fetchUser(userId) { success, user, _ ->
+                if (success && user != null) result[userId] = user
+                if (--pending == 0) onResult(result)
+            }
+        }
+    }
+
+    fun fetchFollowStatus(userIds: List<String>, currentUid: String, onDone: (Set<String>) -> Unit) {
+        if (userIds.isEmpty()) return onDone(emptySet())
+        
         val followed = mutableSetOf<String>()
-        var remaining = targetUids.size
-        targetUids.forEach { uid ->
-            db.child("userFollowing").child(currentUid).child(uid).get().addOnSuccessListener { snap ->
-                if (snap.exists()) followed.add(uid)
-                if (--remaining == 0) onDone(followed)
+        var pending = userIds.size
+        
+        userIds.forEach { userId ->
+            db.child("userFollowing").child(currentUid).child(userId).get().addOnSuccessListener { snapshot ->
+                if (snapshot.exists()) followed.add(userId)
+                if (--pending == 0) onDone(followed)
             }.addOnFailureListener {
-                if (--remaining == 0) onDone(followed)
+                if (--pending == 0) onDone(followed)
             }
         }
     }

@@ -50,7 +50,6 @@ class CreateProfileActivity : AppCompatActivity() {
         prefillIfEditMode()
     }
 
-    // Configures UI elements, navigation between form steps, and the location picker.
     private fun initViews() {
         binding.createProfileINCLUDEPage1.root.visibility = View.VISIBLE
         binding.createProfileINCLUDEPage2.root.visibility = View.GONE
@@ -116,7 +115,6 @@ class CreateProfileActivity : AppCompatActivity() {
         placePicker.bindInput()
     }
 
-    // Loads current user data from the database to fill the form when in edit mode.
     private fun prefillIfEditMode() {
         if (!isEditMode) return
 
@@ -145,7 +143,6 @@ class CreateProfileActivity : AppCompatActivity() {
             }
     }
 
-    // Marks multiple chips as checked if their text matches the provided set of strings.
     private fun setCheckedByText(group: ChipGroup, selected: Set<String>) {
         for (i in 0 until group.childCount) {
             val v = group.getChildAt(i)
@@ -155,7 +152,6 @@ class CreateProfileActivity : AppCompatActivity() {
         }
     }
 
-    // Selects a single chip within a group that matches the specified text.
     private fun setSingleCheckedByText(group: ChipGroup, selectedOne: String) {
         for (i in 0 until group.childCount) {
             val v = group.getChildAt(i)
@@ -165,7 +161,6 @@ class CreateProfileActivity : AppCompatActivity() {
         }
     }
 
-    // Validates inputs and creates a new user record in the database.
     private fun saveProfileCreateMode() {
         val firebaseUser = auth.currentUser ?: run {
             Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show()
@@ -184,7 +179,7 @@ class CreateProfileActivity : AppCompatActivity() {
         if (firstName.isBlank() || lastName.isBlank() || location.isBlank() ||
             skillLevelList.isEmpty() || instruments.isEmpty() || genres.isEmpty()
         ) {
-            Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -213,7 +208,6 @@ class CreateProfileActivity : AppCompatActivity() {
         }
     }
 
-    // Validates updated fields and applies changes to an existing database user record.
     private fun saveProfileEditMode() {
         val uid = auth.currentUser?.uid ?: run {
             Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show()
@@ -258,7 +252,6 @@ class CreateProfileActivity : AppCompatActivity() {
             }
     }
 
-    // Iterates through a chip group to collect the text of all selected items.
     private fun getSelectedChips(group: ChipGroup): List<String> {
         val selected = mutableListOf<String>()
         for (id in group.checkedChipIds) {

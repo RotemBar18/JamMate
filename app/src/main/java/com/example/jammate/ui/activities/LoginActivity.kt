@@ -20,13 +20,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
-// This activity manages the user authentication flow and provides a modern landing experience.
 class LoginActivity : AppCompatActivity() {
 
     private val db = FirebaseDatabase.getInstance().reference
     private lateinit var binding: ActivityLoginBinding
 
-    // Handles the result of the sign-in intent and routes the user accordingly.
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract(),
     ) { res ->
@@ -41,31 +39,26 @@ class LoginActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
-        // Adjusts view padding to account for system bars while maintaining an immersive layout.
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Sets up the landing page action to open the authentication options modal.
         binding.loginBTNSignIn.setOnClickListener {
             showAuthModal()
         }
 
-        // Checks if a user is already authenticated to skip the sign-in screen.
         if (FirebaseAuth.getInstance().currentUser != null) {
             routeAfterAuth()
         }
     }
 
-    // Displays a bottom sheet modal containing different authentication provider options.
     private fun showAuthModal() {
         val dialog = BottomSheetDialog(this)
         val modalBinding = ModalAuthOptionsBinding.inflate(layoutInflater)
         dialog.setContentView(modalBinding.root)
 
-        // Launches sign-in flow for the selected provider.
         modalBinding.authModalBTNEmail.setOnClickListener {
             dialog.dismiss()
             signIn(AuthUI.IdpConfig.EmailBuilder().build())
@@ -79,7 +72,6 @@ class LoginActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    // Configures and launches the Firebase UI authentication intent for a specific provider.
     private fun signIn(provider: AuthUI.IdpConfig) {
         val signInIntent = AuthUI.getInstance()
             .createSignInIntentBuilder()
@@ -91,7 +83,6 @@ class LoginActivity : AppCompatActivity() {
         signInLauncher.launch(signInIntent)
     }
 
-    // Processes the authentication result and displays an error message if the sign-in fails.
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         if (result.resultCode == RESULT_OK) {
             routeAfterAuth()
@@ -100,7 +91,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // Navigates the user to either the Main screen or the Profile Creation screen based on the provided class name.
     private fun transactToNextScreen(className: String) {
         val targetIntent = when (className) {
             Constants.Activities.MAIN -> Intent(this, MainActivity::class.java)
@@ -114,13 +104,11 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // Verifies the user's profile status in the database and directs them to the appropriate next screen.
     private fun routeAfterAuth() {
         val user = FirebaseAuth.getInstance().currentUser ?: return
         val uid = user.uid
         val ref = db.child("users").child(uid).child("profileCompleted")
 
-        // Retrieves the profile completion flag to determine if the user needs to set up their profile.
         ref.get()
             .addOnSuccessListener { snapshot ->
                 val completed = snapshot.getValue(Boolean::class.java)

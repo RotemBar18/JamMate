@@ -29,7 +29,7 @@ object Constants {
     object PostActions {
         const val LIKE = "LIKE"
         const val COMING = "COMING"
-        const val APPLY = "apply"
+        const val APPLY = "APPLY"
     }
 
     // Unified tags for partial UI updates across adapters

@@ -12,11 +12,9 @@ import com.example.jammate.model.Comment
 import com.example.jammate.utilities.ImageLoader
 import androidx.core.net.toUri
 
-// Manages the list of user comments and how they appear on screen.
 class
 CommentAdapter : ListAdapter<Comment, CommentAdapter.CommentViewHolder>(CommentDiffCallback()) {
 
-    // Holds references to the views for each individual comment item.
     class CommentViewHolder(val binding: ItemCommentBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
@@ -31,14 +29,12 @@ CommentAdapter : ListAdapter<Comment, CommentAdapter.CommentViewHolder>(CommentD
         binding.commentLBLUserName.text = item.ownerName
         binding.commentLBLText.text = item.text
         
-        // Calculates and shows the relative time since the comment was posted.
         binding.commentLBLTime.text = DateUtils.getRelativeTimeSpanString(
             item.createdAt,
             System.currentTimeMillis(),
             DateUtils.MINUTE_IN_MILLIS
         )
 
-        // Loads the profile picture or sets a default icon if the URL is empty.
         val photoUrl = item.ownerPhotoUrl
         if (photoUrl.isNotBlank()) {
             ImageLoader.getInstance().loadImage(
@@ -51,7 +47,6 @@ CommentAdapter : ListAdapter<Comment, CommentAdapter.CommentViewHolder>(CommentD
         }
     }
 
-    // Compares items to determine if the list needs to be updated efficiently.
     class CommentDiffCallback : DiffUtil.ItemCallback<Comment>() {
         override fun areItemsTheSame(old: Comment, new: Comment) = old.commentId == new.commentId
         override fun areContentsTheSame(old: Comment, new: Comment) = old == new

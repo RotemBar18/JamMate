@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jammate.adapters.CommentAdapter
+import com.example.jammate.data.CommentManager
 import com.example.jammate.data.PostManager
 import com.example.jammate.data.UserManager
 import com.example.jammate.databinding.ModalCommentsBinding
@@ -16,9 +17,7 @@ import com.google.firebase.database.ValueEventListener
 
 class CommentsBottomSheetFragment : BottomSheetDialogFragment() {
 
-    private var _binding: ModalCommentsBinding? = null
-    private val binding get() = _binding!!
-
+    private lateinit var binding: ModalCommentsBinding
     private lateinit var postId: String
     private val adapter = CommentAdapter()
     private var currentUser: User? = null
@@ -45,7 +44,7 @@ class CommentsBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = ModalCommentsBinding.inflate(inflater, container, false)
+        binding = ModalCommentsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -72,7 +71,7 @@ class CommentsBottomSheetFragment : BottomSheetDialogFragment() {
     private fun startObservingComments() {
         if (postId.isBlank()) return
         
-        commentListener = PostManager.instance.observeComments(postId) { comments ->
+        commentListener = CommentManager.instance.observeComments(postId) { comments ->
             adapter.submitList(comments)
             binding.commentsLBLTitle.text = if (comments.isEmpty()) "No Comments" else "${comments.size} Comments"
             
@@ -89,7 +88,7 @@ class CommentsBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun sendComment(text: String) {
         val user = currentUser ?: return
-        PostManager.instance.addComment(postId, text, user) { ok, err ->
+        CommentManager.instance.addComment(postId, text, user) { ok, err ->
             if (ok) {
                 binding.commentsINPUTNewComment.setText("")
             } else {
@@ -99,8 +98,11 @@ class CommentsBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     override fun onDestroyView() {
-        commentListener?.let { PostManager.instance.stopObservingComments(postId, it) }
         super.onDestroyView()
-        _binding = null
+        commentListener?.let { 
+            CommentManager.instance.stopObservingComments(postId, it)
+        }
     }
+
+
 }

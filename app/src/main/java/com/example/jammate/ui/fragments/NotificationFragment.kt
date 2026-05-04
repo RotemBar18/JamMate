@@ -15,8 +15,7 @@ import com.google.firebase.database.ValueEventListener
 
 class NotificationFragment : Fragment() {
 
-    private var _binding: FragmentNotificationBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentNotificationBinding
 
     private lateinit var adapter: NotificationAdapter
     private var notificationListener: ValueEventListener? = null
@@ -26,7 +25,7 @@ class NotificationFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentNotificationBinding.inflate(inflater, container, false)
+        binding = FragmentNotificationBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -46,9 +45,6 @@ class NotificationFragment : Fragment() {
     private fun setupRecyclerView() {
         adapter = NotificationAdapter(
             onNotificationClick = { notification ->
-                if (!notification.isRead) {
-                    NotificationManager.instance.markAsRead(currentUid ?: "", notification.notificationId)
-                }
                 ProfileActivity.start(requireContext(), notification.senderId)
             },
             onDeleteClick = { notification ->
@@ -61,15 +57,11 @@ class NotificationFragment : Fragment() {
 
     private fun observeNotifications() {
         val uid = currentUid ?: return
-        notificationListener = NotificationManager.instance.observeNotifications(uid) { list ->
-            // Safety check: Fragment might be detached or view destroyed
-            if (_binding == null) return@observeNotifications
-            
+        notificationListener = NotificationManager.instance.observeAndGetNotifications(uid) { list ->
             adapter.submitList(list)
             binding.notificationLAYEmptyState.visibility = if (list.isEmpty()) View.VISIBLE else View.GONE
 
-            // Automatically mark any new unread notifications as read while the user is viewing this screen
-            if (list.any { !it.isRead }) {
+            if (list.any { !it.readStatus }) {
                 markAllAsRead()
             }
         }
@@ -77,11 +69,9 @@ class NotificationFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        val uid = currentUid
-        val listener = notificationListener
-        if (uid != null && listener != null) {
-            NotificationManager.instance.stopObserving(uid, listener)
+        val uid = currentUid ?: return
+        notificationListener?.let {
+            NotificationManager.instance.removeNotificationListener(uid, it)
         }
-        _binding = null
     }
 }

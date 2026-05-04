@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity(), LocationCallback {
 
     private val locationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-
             val granted =
                 result[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
                         result[Manifest.permission.ACCESS_COARSE_LOCATION] == true
@@ -76,14 +75,12 @@ class MainActivity : AppCompatActivity(), LocationCallback {
                 clearNotificationBadge()
             }
         }
-
-        NotificationManager.instance.observeNotifications(uid) { list ->
+        NotificationManager.instance.observeAndGetNotifications(uid) { list ->
             if (navController.currentDestination?.id == R.id.notificationFragment) {
                 clearNotificationBadge()
-                return@observeNotifications
             }
 
-            val unreadCount = list.count { !it.isRead }
+            val unreadCount = list.count { !it.readStatus   }
             if (unreadCount > 0) {
                 val badge = binding.mainNAVBottomNavbar.getOrCreateBadge(R.id.notificationFragment)
                 badge.isVisible = true

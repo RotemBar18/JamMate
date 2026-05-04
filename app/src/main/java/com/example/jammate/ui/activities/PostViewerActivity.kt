@@ -21,7 +21,6 @@ import com.example.jammate.utilities.Constants
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
-// This activity displays posts in a full-screen vertical pager.
 class PostViewerActivity : AppCompatActivity() {
 
     private lateinit var pager: ViewPager2
@@ -250,7 +249,10 @@ class PostViewerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         pager.unregisterOnPageChangeCallback(pageCallback)
-        player?.release()
+        player?.let {
+            adapter.releasePlayerListener(it)
+            it.release()
+        }
         player = null
         super.onDestroy()
     }
