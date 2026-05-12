@@ -74,6 +74,31 @@ class PostViewerActivity : AppCompatActivity() {
         handleIntent()
     }
 
+    override fun onStart() {
+        super.onStart()
+        player?.let { adapter.playAt(pager, currentPos, it) }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        player?.pause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        player?.let { adapter.stopAt(currentPos, it); it.playWhenReady = false; it.pause() }
+    }
+
+    override fun onDestroy() {
+        pager.unregisterOnPageChangeCallback(pageCallback)
+        player?.let {
+            adapter.releasePlayerListener(it)
+            it.release()
+        }
+        player = null
+        super.onDestroy()
+    }
+
     private fun setupAdapter() {
         adapter = PostViewerPagerAdapter(
             onBack = { finish() },
@@ -237,25 +262,6 @@ class PostViewerActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        player?.let { adapter.playAt(pager, currentPos, it) }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        player?.let { adapter.stopAt(currentPos, it); it.playWhenReady = false; it.pause() }
-    }
-
-    override fun onDestroy() {
-        pager.unregisterOnPageChangeCallback(pageCallback)
-        player?.let {
-            adapter.releasePlayerListener(it)
-            it.release()
-        }
-        player = null
-        super.onDestroy()
-    }
 
 
     companion object {
